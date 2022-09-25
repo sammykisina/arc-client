@@ -21,6 +21,7 @@ import {
 // all components imports {local and packages}
 import { Icon } from "../";
 import { globalTableState } from "../../atoms/TableAtom";
+import { globalEmployeeState } from "../../atoms/EmployeeAtom";
 
 const Modal = ({ modalState, modalStyles, component, close, closeIcon }) => {
   // component states
@@ -32,6 +33,7 @@ const Modal = ({ modalState, modalStyles, component, close, closeIcon }) => {
   const setIsEditingProductVariant = useSetRecoilState(
     isEditingProductVariantState
   );
+  const setGlobalEmployee = useSetRecoilState(globalEmployeeState);
   const setGlobalTable = useSetRecoilState(globalTableState);
 
   return (
@@ -43,7 +45,7 @@ const Modal = ({ modalState, modalStyles, component, close, closeIcon }) => {
           icon={closeIcon}
           purpose={() => {
             close();
-            setGlobalItemHolder(null);
+            setGlobalEmployee(null);
             setGlobalCategory(null);
             setGlobalProduct(null);
             setGlobalProductVariant(null);

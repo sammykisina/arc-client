@@ -29,14 +29,4 @@ export const getEmployeeTitle = (role) => {
   return title;
 };
 
-export const getEmployeeRoleName = (role) => {
-  let roleName = "";
 
-  if (role === "admin") roleName = "Administrator";
-  else if (role === "super-admin") roleName = "Super Admin";
-  else if (role === "bartender") roleName = "Bartender";
-  else if (role === "supplier") roleName = "Supplier";
-  else roleName = "Customer";
-
-  return roleName;
-};

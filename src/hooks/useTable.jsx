@@ -66,7 +66,9 @@ const useTable = () => {
     "Sable",
   ];
 
-  // hook functions
+  /**
+   * Hook functions
+   */
   const getCurrentlyAssignedTableNames = () => {
     const tableNames = new Set();
 
@@ -158,9 +160,6 @@ const useTable = () => {
     return tableEditData;
   };
 
-  /**
-   * api action functions
-   */
   const createTable = (tableData) => {
     TableAPI.create(tableData).then((response) => {
       if (response.error === 1) {
@@ -224,6 +223,7 @@ const useTable = () => {
         );
 
         setAllTablesFromDB(newTables);
+        Notification.successNotification(response.message);
       }
     });
   };
@@ -255,11 +255,18 @@ const useTable = () => {
             <div className="flex gap-x-3" key={table?.attributes?.uuid}>
               <Icon
                 icon={<MdDelete className="deleteActionButton" />}
-                purpose={() => handleDeleteTable(table)}
+                purpose={() => {
+                  setGlobalTable(table);
+                  setShowDeleteTableModal(true);
+                }}
               />
               <Icon
                 icon={<RiEditCircleFill className="editActionButton" />}
-                purpose={() => handleEditTable(table)}
+                purpose={() => {
+                  setGlobalTable(table);
+                  setIsEditingTable(true);
+                  setShowCreateOrEditTableModal(true);
+                }}
               />
             </div>,
           ],
@@ -270,31 +277,17 @@ const useTable = () => {
     return tablesData;
   };
 
-  /**
-   * client action functions
-   */
-  const handleDeleteTable = (table) => {
-    setGlobalTable(table);
-    setShowDeleteTableModal(true);
-  };
-
-  const handleEditTable = (table) => {
-    setGlobalTable(table);
-    setIsEditingTable(true);
-    setShowCreateOrEditTableModal(true);
-  };
-
   return {
     numberOfSeatsOptions,
     tableNameOptions,
     getCurrentlyAssignedTableNames,
     getAllTables,
-    isFetchingTables,
     createTable,
     getTablesData,
     tablesColumns,
     deleteTable,
     getTableEditData,
+    isFetchingTables,
     editTable,
   };
 };

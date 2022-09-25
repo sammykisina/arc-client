@@ -1,4 +1,3 @@
-import React from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { DeleteItem } from "../../";
 import { showDeleteTableModalState } from "../../../atoms/ModalAtoms";
@@ -19,8 +18,8 @@ const DeleteTable = () => {
 
   const tableDelete = () => {
     deleteTable(globalTable?.attributes?.uuid);
-    setShowDeleteTableModal(false);
     setGlobalTable(null);
+    setShowDeleteTableModal(false);
   };
 
   return (

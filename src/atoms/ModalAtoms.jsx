@@ -12,8 +12,8 @@ export const showDeleteProductModalState = atom({
   default: false,
 });
 
-export const showAddOrEditEmployeeModalState = atom({
-  key: "showAddOrEditEmployeeModalState",
+export const showCreateOrEditEmployeeModalState = atom({
+  key: "showCreateOrEditEmployeeModalState",
   default: false,
 });
 

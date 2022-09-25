@@ -27,9 +27,7 @@ const Tables = () => {
           icon={<HiPlus className="w-5 h-5 text-c_white" />}
           buttonStyles="primaryButton"
           buttonTitleWrapperStyles="hidden sm:block"
-          purpose={() => {
-            setShowCreateOrEditTableModal(true);
-          }}
+          purpose={() => setShowCreateOrEditTableModal(true)}
         />
       </div>
 

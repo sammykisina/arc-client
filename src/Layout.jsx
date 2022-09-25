@@ -1,11 +1,6 @@
-// react framework imports
 import React, { useRef } from "react";
 import { BrowserRouter } from "react-router-dom";
-
-// icon imports {react icons}
 import { CgClose } from "react-icons/cg";
-
-// recoil imports {recoil and atoms}
 import { useRecoilValue, useRecoilState } from "recoil";
 import {
   currentUserRoleState,
@@ -14,8 +9,8 @@ import {
   showSidebarState,
 } from "./atoms/AppAtoms";
 import {
-  showAddOrEditEmployeeModalState,
   showCreateOrEditCategoryModalState,
+  showCreateOrEditEmployeeModalState,
   showCreateOrEditOrderModalState,
   showCreateOrEditProductState,
   showCreateOrEditProductVariantModalState,
@@ -28,13 +23,11 @@ import {
 } from "./atoms/ModalAtoms";
 import { showDeleteCategoryModalState } from "./atoms/CategoryAtom";
 import { isEditingProductState } from "./atoms/ProductAtom";
-
-// all components imports {local and packages}
 import {
   Sidebar,
   TopHeader,
   Modal,
-  AddOrEditEmployee,
+  CreateOrEditEmployee,
   DeleteEmployee,
   CreateOrEditCategory,
   DeleteCategory,
@@ -66,8 +59,8 @@ const Layout = () => {
   const [showCreateOrEditProduct, setShowCreateOrEditProduct] = useRecoilState(
     showCreateOrEditProductState
   );
-  const [showAddOrEditEmployeeModal, setShowAddOrEditEmployeeModal] =
-    useRecoilState(showAddOrEditEmployeeModalState);
+  const [showCreateOrEditEmployeeModal, setShowCreateOrEditEmployeeModal] =
+    useRecoilState(showCreateOrEditEmployeeModalState);
   const [showCreateOrEditCategoryModal, setShowCreateOrEditCategoryModal] =
     useRecoilState(showCreateOrEditCategoryModalState);
 
@@ -163,11 +156,11 @@ const Layout = () => {
         />
         {/* the create employee modal */}
         <Modal
-          modalState={showAddOrEditEmployeeModal}
+          modalState={showCreateOrEditEmployeeModal}
           modalStyles="w-[95vw] h-[500px] sm:h-[400px]"
           closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowAddOrEditEmployeeModal(false)}
-          component={<AddOrEditEmployee />}
+          close={() => setShowCreateOrEditEmployeeModal(false)}
+          component={<CreateOrEditEmployee />}
         />
         {/* the delete employee modal */}
         <Modal

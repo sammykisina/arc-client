@@ -7,7 +7,7 @@ const CreateOrEditOrder = () => {
   const [globalOrderObject, setGlobalOrderObject] = useRecoilState(
     globalOrderObjectState
   );
-  console.log("data", globalOrderObject);
+  // console.log("data", globalOrderObject);
   // component functions
   return <div>CreateOrder</div>;
 };

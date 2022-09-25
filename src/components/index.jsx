@@ -5,7 +5,7 @@ export { default as TopHeader } from "./TopHeader";
 // modal imports
 export { default as Modal } from "./modal/Modal";
 export { default as CreateOrEditProduct } from "./modal/modalComponents/CreateOrEditProduct";
-export { default as AddOrEditEmployee } from "./modal/modalComponents/CreateOrEditEmployee";
+export { default as CreateOrEditEmployee } from "./modal/modalComponents/CreateOrEditEmployee";
 export { default as DeleteEmployee } from "./modal/modalComponents/DeleteEmployee";
 export { default as CreateOrEditCategory } from "./modal/modalComponents/CreateOrEditCategory";
 export { default as DeleteCategory } from "./modal/modalComponents/DeleteCategory";
