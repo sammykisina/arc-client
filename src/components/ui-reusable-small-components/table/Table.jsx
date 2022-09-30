@@ -1,4 +1,4 @@
-import React, { Fragment } from "react"
+import React, { Fragment } from "react";
 import {
   SortDownIcon,
   SortIcon,
@@ -55,8 +55,8 @@ const Table = ({
     <section>
       {showFilters && (
         <section
-          className={`flex gap-3 flex-col justify-start ${
-            isSidebarOpen ? "md:flex-col lg:flex-row" : "md:flex-row "
+          className={`flex gap-3 flex-col justify-start px-2 ${
+            isSidebarOpen ? "md:flex-row lg:flex-row" : "md:flex-row"
           }`}
         >
           {/* the global search section */}
@@ -67,7 +67,13 @@ const Table = ({
           />
 
           {/* the filter by role section */}
-          <div className="flex flex-row gap-1 w-fit items-center lg:flex-row">
+          <div
+            className={`flex flex-col  gap-1 w-fit items-center ${
+              isSidebarOpen
+                ? "sm:flex-col lg:flex-row"
+                : "sm:flex-row md:flex-row"
+            }`}
+          >
             {headerGroups.map((headerGroup) =>
               headerGroup.headers.map((column) =>
                 column.Filter ? (
@@ -142,7 +148,7 @@ const Table = ({
                         return (
                           <td
                             {...cell.getCellProps()}
-                            className="px-6 py-2 whitespace-nowrap max-w-[325px] w-[325px] hover:break-words truncate"
+                            className="px-6 py-2 whitespace-nowrap max-w-[325px] w-[325px] hover:break-words truncate text-sm"
                             role="cell"
                           >
                             {cell.column.Cell.name === "defaultRenderer" ? (

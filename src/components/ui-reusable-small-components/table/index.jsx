@@ -5,6 +5,7 @@ export { default as GlobalFilter } from "./GlobalFilter";
 export { default as StatusFilter } from "./StatusFilter";
 export { default as CategoryFilter } from "./CategoryFilter";
 export { default as RoleFilter } from "./RoleFilter";
+export { default as LocationFilter } from "./LocationFilter";
 
 // custom cells imports
 export { default as NameUuidCell } from "./NameUuidCell";

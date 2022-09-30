@@ -36,7 +36,7 @@ const CreateOrEditEmployee = () => {
     getCurrentAssignedEmployeeIDs,
     getEmployeeEditData,
     createEmployee,
-    editEmployee,
+    updateEmployee,
   } = useEmployee();
 
   /**
@@ -89,7 +89,7 @@ const CreateOrEditEmployee = () => {
 
     // actual creating or editing of the employee
     isEditingEmployee
-      ? editEmployee(
+      ? updateEmployee(
           employeeEditData,
           first_name,
           last_name,

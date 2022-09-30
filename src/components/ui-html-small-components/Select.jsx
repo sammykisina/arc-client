@@ -1,104 +1,118 @@
-// react framework imports
-import { useState, useRef } from "react";
+import React, { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
-import { useClickOutside } from "react-haiku";
+import { HiX } from "react-icons/hi";
+import { Icon, Button } from "..";
 
 const Select = ({
-  title,
-  selectWrapperStyles,
-  selectButtonStyles,
-  options,
   selected,
+  title,
   setSelected,
-  inputPlaceHolder,
+  options,
+  multiple,
+  selectWrapperStyles,
+  selectPanelStyles,
+  selectLabel,
+  selectLabelStyles,
 }) => {
-  // component states
-  const [inputValue, setInputValue] = useState("");
+  /**
+   * Component states
+   */
   const [isSelectPanelOpen, setIsSelectPanelOpen] = useState(false);
-  const optionPanelRef = useRef(null);
 
-  // component functions
-  useClickOutside(optionPanelRef, () => setIsSelectPanelOpen(false));
+  /**
+   * Component functions
+   */
+  const selectOption = (option) => {
+    if (multiple) {
+      if (selected.includes(option)) {
+        setSelected(
+          selected.filter((selectedOption) => selectedOption != option)
+        );
+      } else {
+        setSelected([...selected, option]);
+      }
+    } else {
+      if (option != selected) setSelected(option);
+    }
+  };
 
   return (
     <section
-      className={`relative  ${selectWrapperStyles}`}
-      ref={optionPanelRef}
+      tabIndex={0}
+      className={`relative min-h-[1.5em] h-fit ring-1 cursor-pointer flex 
+      items-center gap-[.5em] outline-none focus:border-c_yellow rounded-md ${selectWrapperStyles}`}
+      onClick={() =>
+        setIsSelectPanelOpen(
+          (prevIsSelectPanelOpenState) => !prevIsSelectPanelOpenState
+        )
+      }
+      onBlur={() => setIsSelectPanelOpen(false)}
     >
-      {/* the select button */}
-      <div
-        onClick={() =>
-          setIsSelectPanelOpen(
-            (prevIsSelectPanelOpenState) => !prevIsSelectPanelOpenState
-          )
-        }
-        className={`${selectButtonStyles} flex justify-between items-center  cursor-pointer 
-          ${!selected ? "text-c_dark/50" : "text-c_dark"}`}
-      >
+      <div className="flex-1 w-full flex gap-1 capitalize text-c_gray text-sm  overflow-x-auto scrollbar-hide">
         {selected
-          ? selected.name?.length > 25 || selected > 25
-            ? selected.name?.substring(0, 25) ||
-              selected.substring(0, 25) + "..."
-            : selected.name || selected
+          ? multiple
+            ? selected.map((selectedOption, selectedOptionIndex) => (
+                <Button
+                  key={selectedOptionIndex}
+                  buttonStyles="flex justify-center items-center gap-1 border rounded-full px-1 w-[120px]"
+                  title={
+                    selectedOption.name ? selectedOption.name : selectedOption
+                  }
+                  buttonTitleWrapperStyles="capitalize text-sm"
+                  icon={<HiX className="w-3 h-3" />}
+                  purpose={(event) => {
+                    event.stopPropagation();
+                    selectOption(selectedOption);
+                  }}
+                />
+              ))
+            : selected.name
+            ? selected.name
+            : selected
           : title}
-        <BiChevronDown
-          className={`w-6 h-6 text-c_green duration-300 ${
-            isSelectPanelOpen && "rotate-180"
-          }`}
-        />
       </div>
 
-      {/* select items */}
-      <ul
-        className={`absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1.5 text-base border overflow-auto focus:outline-none sm:text-sm capitalize text-c_dark duration-300 px-2 scrollbar-hide ${
-          isSelectPanelOpen ? "max-h-60" : "hidden"
-        }`}
-      >
-        {/* the search input */}
-        <div className="flex items-center  sticky top-0 bg-white mb-3 border rounded-lg gap-2 w-full py-1 px-2">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(event) =>
-              setInputValue(event.target.value.toLowerCase())
-            }
-            placeholder={inputPlaceHolder}
-            className="placeholder:text-c_gray outline-none rounded-md text-base w-full"
-          />
-        </div>
+      <Icon
+        icon={<HiX className="w-3 h-3" />}
+        purpose={(event) => {
+          event.stopPropagation();
+          multiple ? setSelected([]) : setSelected("");
+        }}
+      />
 
-        <div className="flex flex-col gap-y-2 px-2">
-          {options?.map((option, optionIndex) => {
-            return (
-              <li
-                key={optionIndex}
-                className={`p-2 text-sm hover:bg-c_green_light text-c_green rounded-md cursor-pointer ${
-                  option?.name
-                    ? option?.name === selected.name && "bg-c_green_light"
-                    : option === selected && "bg-c_green_light"
-                } ${
-                  option?.name
-                    ? option?.name.toLowerCase().startsWith(inputValue)
-                      ? "block"
-                      : "hidden"
-                    : option.toLowerCase().startsWith(inputValue)
-                    ? "block"
-                    : "hidden"
-                } `}
-                onClick={() => {
-                  if (option?.name != selected?.name || option != selected) {
-                    setSelected(option);
-                    setIsSelectPanelOpen(false);
-                    setInputValue("");
-                  }
-                }}
-              >
-                {option?.name ? option?.name : option}
-              </li>
-            );
-          })}
-        </div>
+      <div className="divider bg-c_dark items-stretch w-[.05rem]" />
+      <BiChevronDown
+        className={`w-6 h-6 text-c_gray duration-300 ${
+          isSelectPanelOpen && "rotate-180"
+        }`}
+      />
+
+      <ul
+        className={`overflow-y-auto ring-1 rounded-md w-full absolute left-0 top-[calc(100%+.25rem)]
+         bg-white z-50 flex flex-col gap-2 scrollbar-hide p-[5px] text-c_gray text-sm
+         ${selectPanelStyles} ${isSelectPanelOpen ? "block" : "hidden"}`}
+      >
+        {options.map((option, optionIndex) => (
+          <li
+            onClick={(event) => {
+              event.stopPropagation();
+              selectOption(option);
+              setIsSelectPanelOpen(false);
+            }}
+            key={optionIndex}
+            className={`capitalize hover:bg-c_yellow/60 rounded-2xl w-full px-2 py-1 text-c_dark   ${
+              option === selected ? "bg-c_yellow/60" : ""
+            }`}
+          >
+            {option.name ? option.name : option}
+          </li>
+        ))}
       </ul>
+
+      {/* label */}
+      <label className={`absolute -top-[15px] bg-white  ${selectLabelStyles}`}>
+        {selectLabel}
+      </label>
     </section>
   );
 };

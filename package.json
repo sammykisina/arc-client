@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@material-tailwind/react": "^1.2.3",
     "@netlify/classnames-template-literals": "^1.0.3",
     "@tippyjs/react": "^4.2.6",
     "axios": "^0.27.2",

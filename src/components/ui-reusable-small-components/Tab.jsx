@@ -45,7 +45,7 @@ const Tab = ({
       <div className={`${tabsBodyStyles}`}>
         {/* btn container */}
         <div
-          className={`${
+          className={`duration-300 ${
             iconsOnlyTabs ? iconsOnlyTabsStyles : labelsOnlyTabsStyles
           }`}
         >

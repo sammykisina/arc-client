@@ -31,13 +31,12 @@ const Filter = ({
 
   return (
     <Select
-      options={options}
       title={defaultValue}
-      selectWrapperStyles="w-[140px] sm:w-[170px] text-c_dark"
-      selectButtonStyles="border rounded-xl text-sm capitalize py-1 px-2"
+      options={options}
+      selectWrapperStyles="w-[12em] rounded-xl ring-c_gray p-[.3em]"
+      selectPanelStyles="ring-c_gray/40 shadow"
       selected={selected}
-      setSelected={setSelected}
-      inputPlaceHolder="Search Filter"
+      setSelected={(option) => setSelected(option)}
     />
   );
 };

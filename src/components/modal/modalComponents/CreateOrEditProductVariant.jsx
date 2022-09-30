@@ -1,47 +1,26 @@
-// react framework imports
-import { useEffect, useMemo, useState } from "react";
-
-// icon imports {react icons}
+import { useEffect, useState } from "react";
 import { BsSave } from "react-icons/bs";
-
-// recoil imports {recoil and atoms}
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { globalProductState } from "../../../atoms/ProductAtom";
 import {
-  allProductsFromDBState,
-  globalProductState,
-} from "../../../atoms/ProductAtom";
-import {
-  allProductVariantsFromDBState,
   globalProductVariantState,
   isEditingProductVariantState,
 } from "../../../atoms/VariantAtom";
 import { showCreateOrEditProductVariantModalState } from "../../../atoms/ModalAtoms";
-
-// api layer imports
-import { ProductVariantAPI } from "../../../api/productVariantAPI";
-
-// all components imports {local and packages}
 import { Button, CheckBox, Line, Select, Title } from "../../";
 import { useForm } from "react-hook-form";
 import { Notification } from "../../../utils/notifications";
-import {
-  getCurrentAssignedProductVariantNames,
-  getProductVariantEditData,
-} from "../../../utils/productVariant";
 import ctr from "@netlify/classnames-template-literals";
+import { useProductVariant } from "../../../hooks";
 
 const CreateOrEditProductVariant = () => {
-  // component states
-  const [allProductsFromDB, setAllProductsFromDB] = useRecoilState(
-    allProductsFromDBState
-  );
+  /**
+   * component states
+   */
   const [isEditingProductVariant, setIsEditingProductVariant] = useRecoilState(
     isEditingProductVariantState
   );
   const [selectedProduct, setSelectedProduct] = useState("");
-  const allProductVariantsFromDB = useRecoilValue(
-    allProductVariantsFromDBState
-  );
   const setShowCreateOrEditProductVariantModal = useSetRecoilState(
     showCreateOrEditProductVariantModalState
   );
@@ -50,95 +29,19 @@ const CreateOrEditProductVariant = () => {
   );
   const [globalProduct, setGlobalProduct] = useRecoilState(globalProductState);
   const [allowVAT, setAllowVAT] = useState(true);
-
+  const {
+    productVariantInputs,
+    getCurrentlyAssignedProductVariantNamesAndMeasurePair,
+    createProductVariant,
+    getProductVariantEditData,
+    updateProductVariant,
+  } = useProductVariant();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-
-  // component functions
-
-  /**
-   * create product options to be used when creating a product variant
-   */
-  const productOptions = useMemo(() => {
-    const options = new Set();
-    // getting the products that should contain variants
-    const dependentProducts = allProductsFromDB.filter(
-      (productFromDB) => productFromDB?.attributes?.form === "dependent"
-    );
-    dependentProducts?.forEach((dependentProduct) => {
-      options.add({
-        name: dependentProduct?.attributes?.name,
-        value: dependentProduct?.id,
-      });
-    });
-
-    return [...options.values()];
-  }, [allProductsFromDB]);
-
-  /**
-   * product variant inputs
-   */
-  const productVariantInputs = [
-    {
-      name: "Product",
-      label: "Variant Product",
-      options: productOptions,
-      component: "Select",
-      type: "text",
-      gap: true,
-    },
-    {
-      name: "name",
-      label: "Variant Name",
-      placeholder: "Name",
-      errorMessage: "Enter variant name",
-      component: "Input",
-      type: "text",
-    },
-    {
-      name: "cost",
-      label: "Variant Buying Price",
-      placeholder: "Cost",
-      errorMessage: "Enter variant buying price",
-      component: "Input",
-      type: "number",
-      gap: true,
-    },
-    {
-      name: "retail",
-      label: "Variant Selling Price",
-      placeholder: "Retail",
-      errorMessage: "Enter variant selling price",
-      component: "Input",
-      type: "number",
-    },
-    {
-      name: "initial_number_of_pieces",
-      label: "Variant Stock Quantity",
-      placeholder: "Number Of Pieces",
-      errorMessage: "Enter variant number of pieces",
-      component: "Input",
-      type: "number",
-      gap: true,
-    },
-    {
-      name: "measure",
-      label: "Variant Measure",
-      placeholder: "Measure",
-      errorMessage: "Enter variant measure",
-      component: "Input",
-      type: "number",
-    },
-    {
-      name: "vat",
-      component: "Switch",
-      type: "radio",
-    },
-  ];
 
   /**
    * set the default values when editing
@@ -171,173 +74,74 @@ const CreateOrEditProductVariant = () => {
     initial_number_of_pieces,
     measure,
   }) => {
-    let editData = {};
-    // validation of the inputs {product}
-    if (selectedProduct === "") {
-      Notification.errorNotification(
-        "Select the product the variant belongs to"
+    // validation
+    if (selectedProduct === "")
+      return Notification.errorNotification(
+        "Select the product the variant belongs to."
       );
+
+    // validate if a variant with the same name and the same measure is already created
+    const isFound =
+      getCurrentlyAssignedProductVariantNamesAndMeasurePair().some(
+        (productVariantNamesAndMeasurePair) => {
+          if (
+            productVariantNamesAndMeasurePair.name === name &&
+            productVariantNamesAndMeasurePair.measure === measure
+          ) {
+            return true;
+          }
+        }
+      );
+
+    if (!isEditingProductVariant && isFound) {
+      Notification.errorNotification(
+        "Such a variant exits.Change the name or the measure."
+      );
+
       return;
     }
 
-    // validate if the given name has been taken by another variant
-    if (
-      !isEditingProductVariant &&
-      getCurrentAssignedProductVariantNames(allProductVariantsFromDB).includes(
-        name
-      )
-    ) {
-      Notification.errorNotification("The given variant name has been taken");
-
-      return;
-    }
-
-    // get the edit data when editing
+    // when editing
+    let productVariantEditData = {};
     if (isEditingProductVariant) {
-      editData = getProductVariantEditData(
-        globalProduct,
-        globalProductVariant,
+      productVariantEditData = getProductVariantEditData({
         name,
         cost,
         retail,
         initial_number_of_pieces,
         measure,
-        selectedProduct
-      );
+        selectedProduct,
+      });
 
-      // if there are no values to edit
-      if (Object.keys(editData).length === 0) {
-        setGlobalProductVariant(null);
-        setGlobalProduct(null);
-        setIsEditingProductVariant(false);
-        Notification.errorNotification("Nothing to edit");
-        setShowCreateOrEditProductVariantModal(false);
+      if (Object.keys(productVariantEditData).length === 0) {
+        setGlobalProductVariant(null),
+          setGlobalProduct(null),
+          setIsEditingProductVariant(false),
+          Notification.errorNotification("Nothing to edit"),
+          setShowCreateOrEditProductVariantModal(false);
         return;
       }
     }
 
     // actual creating or editing of the product variant
     isEditingProductVariant
-      ? ProductVariantAPI.update(
-          globalProductVariant?.attributes?.uuid,
-          editData
-        ).then((response) => {
-          // editing the product variant
-          if (response.error === 0) {
-            // find the product variant we are editing
-            const editedProductVariant =
-              globalProduct?.relationships?.variants.find(
-                (variant) =>
-                  variant?.attributes?.uuid ===
-                  globalProductVariant?.attributes?.uuid
-              );
-
-            // creating a new updated array of the variants
-            const updatedVariants = globalProduct?.relationships?.variants.map(
-              (variant) =>
-                variant?.attributes?.uuid ===
-                editedProductVariant?.attributes?.uuid
-                  ? {
-                      ...editedProductVariant,
-                      attributes: {
-                        ...editedProductVariant?.attributes,
-                        name: name,
-                        price: {
-                          cost: cost,
-                          retail: retail,
-                        },
-                        inventory: {
-                          ...editedProductVariant?.attributes?.inventory,
-                          stock: initial_number_of_pieces,
-                          store: initial_number_of_pieces,
-                        },
-                        measure: measure,
-                      },
-                    }
-                  : variant
-            );
-
-            //  update the products
-            setAllProductsFromDB(
-              allProductsFromDB.map((productFromDB) =>
-                productFromDB?.attributes?.uuid ===
-                globalProduct?.attributes?.uuid
-                  ? {
-                      ...globalProduct,
-                      relationships: {
-                        ...globalProduct?.relationships,
-                        variants: updatedVariants,
-                      },
-                    }
-                  : productFromDB
-              )
-            );
-          }
-
-          // notifications
-          response.error === 1
-            ? Notification.errorNotification(response.message)
-            : Notification.successNotification(response?.message);
-
-          // reset the states
-          setGlobalProduct(null);
-          setGlobalProductVariant(null);
-          setIsEditingProductVariant(false);
-          setShowCreateOrEditProductVariantModal(false);
+      ? updateProductVariant(productVariantEditData, {
+          name,
+          cost,
+          retail,
+          initial_number_of_pieces,
+          measure,
         })
-      : ProductVariantAPI.create({
-          name: name,
+      : createProductVariant({
+          name,
           cost: parseInt(cost),
           retail: parseInt(retail),
           initial_number_of_pieces: parseInt(initial_number_of_pieces),
           measure: parseInt(measure),
           product_id: selectedProduct.value,
           vat: allowVAT,
-        }).then((response) => {
-          // adding the created variant product variant
-
-          // find the product we are trying to create the variant for
-          const product = allProductsFromDB.find(
-            (productFromDB) => productFromDB?.id === selectedProduct.value
-          );
-
-          // appending the variant together with other product variants
-          const newProducts = allProductsFromDB.map((productFromDB) =>
-            productFromDB?.id === product?.id
-              ? {
-                  ...productFromDB,
-                  relationships: {
-                    ...productFromDB?.relationships,
-                    variants: [
-                      ...productFromDB?.relationships?.variants,
-                      {
-                        ...response.variant,
-                        attributes: {
-                          ...response.variant.attributes,
-                          active: allowVAT,
-                          inventory: {
-                            ...response.variant.attributes?.inventory,
-                            sold: 0,
-                          },
-                        },
-                      },
-                    ],
-                  },
-                }
-              : productFromDB
-          );
-
-          // set the new products
-          setAllProductsFromDB(newProducts);
-
-          // refresh the browser to remove the added product variant from the ui
-          response.error === 1
-            ? window.location.reload(false)
-            : Notification.successNotification(response.message);
         });
 
-    // reset the states
-    setIsEditingProductVariant(false);
     setShowCreateOrEditProductVariantModal(false);
   };
 
@@ -347,10 +151,10 @@ const CreateOrEditProductVariant = () => {
         title={
           isEditingProductVariant
             ? "Edit Product Variant."
-            : "Create a Product Variant."
+            : "Create Product Variant."
         }
       />
-      <Line lineStyles="bg-c_yellow/100 w-[25px] h-[2px]" />
+      <Line lineStyles="bg-c_yellow/100 w-[25px] h-[5px] rounded-full" />
 
       <Title
         title={
@@ -417,8 +221,7 @@ const CreateOrEditProductVariant = () => {
                     <CheckBox
                       label="VAT"
                       checkLabelStyles="text-c_dark"
-                      checkIconsWrapper="bg-c_green_light rounded-full p-1"
-                      checkIconStyles="text-c_green"
+                      checkIconStyles="text-c_yellow"
                       isChecked={allowVAT}
                       setIsChecked={setAllowVAT}
                     />

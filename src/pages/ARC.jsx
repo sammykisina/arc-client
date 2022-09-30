@@ -9,7 +9,7 @@ import { RiBringForward } from "react-icons/ri";
 
 // all components imports {local and packages}
 import { Tab } from "../components";
-import { Product, Properties } from "../pages";
+import { Products, Properties, Suppliers } from "../components";
 import { useState } from "react";
 
 const ARC = () => {
@@ -19,7 +19,7 @@ const ARC = () => {
     {
       label: "Inventory",
       icon: <IoCubeOutline className="icon" />,
-      content: <Product />,
+      content: <Products />,
     },
     {
       label: "Properties",
@@ -38,8 +38,7 @@ const ARC = () => {
     {
       label: "Suppliers",
       icon: <RiBringForward className="icon" />,
-      content: `Because it's about motivating the doers. Because I'm here
-      to follow my dreams and inspire other people to follow their dreams, too.`,
+      content: <Suppliers />,
     },
   ];
   return (
@@ -51,7 +50,7 @@ const ARC = () => {
         index={index}
         setIndex={setIndex}
         iconsOnlyTabsStyles="flex flex-row mb-2 flex-wrap duration-300 lg:flex-col gap-2 col-span-1"
-        tabsContentHeight="h-[580px] md:h-[580px] lg:h-[630px]"
+        tabsContentHeight="h-[505px] sm:h-[580px] md:h-[580px] lg:h-[630px]"
       />
     </section>
   );

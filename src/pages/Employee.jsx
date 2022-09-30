@@ -14,14 +14,14 @@ const Employee = () => {
     employeesTableColumns,
     getEmployeesTableData,
     isFetchingEmployees,
-    getAllEmployee,
+    getAllEmployeeFromDB,
   } = useEmployee();
 
   /**
    * fetch all available employees
    */
   useEffect(() => {
-    getAllEmployee();
+    getAllEmployeeFromDB();
   }, []);
 
   return (

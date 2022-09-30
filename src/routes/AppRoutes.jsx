@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Dashboard,
-  Product,
-  Bills,
-  Employee,
-  ARC,
-  Counter,
-  NotFound,
-} from "../pages";
+import { Dashboard, Bills, Employee, ARC, Counter, NotFound } from "../pages";
 import { Routes, Route } from "react-router-dom";
 import { AdminSuperAdminBartenderPage, AdminSuperAdminPage } from "./";
 

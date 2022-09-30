@@ -7,6 +7,7 @@ import {
 import { MdOutlineImportContacts } from "react-icons/md";
 import { RiSettingsLine, RiSettings2Line } from "react-icons/ri";
 import { GiRoundBottomFlask } from "react-icons/gi";
+import { FiHexagon } from "react-icons/fi";
 
 export const sidebarRouteLinks = [
   {
@@ -31,9 +32,8 @@ export const sidebarRouteLinks = [
   {
     title: "Counter",
     route: "/counter",
-    icon: <GiRoundBottomFlask className="icon" />,
+    icon: <FiHexagon className="icon" />,
     owner: "admin_super-admin_bartender",
-    // gap: true,
   },
 
   {

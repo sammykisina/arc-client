@@ -8,26 +8,18 @@ const DeleteTable = () => {
   // component states
   const [globalTable, setGlobalTable] = useRecoilState(globalTableState);
   const setShowDeleteTableModal = useSetRecoilState(showDeleteTableModalState);
-  const { deleteTable, cancel } = useTable();
-
-  // component functions
-  const cancelDelete = () => {
-    setShowDeleteTableModal(false);
-    setGlobalTable(null);
-  };
-
-  const tableDelete = () => {
-    deleteTable(globalTable?.attributes?.uuid);
-    setGlobalTable(null);
-    setShowDeleteTableModal(false);
-  };
+  const { deleteTable } = useTable();
 
   return (
     <section>
       <DeleteItem
         name={`Table ${globalTable?.attributes?.name}`}
-        cancelDelete={cancelDelete}
-        itemDelete={tableDelete}
+        cancelDelete={() => {
+          setGlobalTable(null), setShowDeleteTableModal(false);
+        }}
+        itemDelete={() => {
+          deleteTable(), setGlobalTable(null), setShowDeleteTableModal(false);
+        }}
       />
     </section>
   );

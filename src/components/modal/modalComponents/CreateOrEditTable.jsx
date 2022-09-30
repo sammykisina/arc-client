@@ -14,7 +14,9 @@ import { Notification } from "../../../utils/notifications";
 import { showCreateOrEditTableModalState } from "../../../atoms/ModalAtoms";
 
 const CreateOrEditTable = () => {
-  // component states
+  /**
+   * Component states
+   */
   const [isEditingTable, setIsEditingTable] =
     useRecoilState(isEditingTableState);
   const { handleSubmit } = useForm();
@@ -33,7 +35,7 @@ const CreateOrEditTable = () => {
     getCurrentlyAssignedTableNames,
     createTable,
     getTableEditData,
-    editTable,
+    updateTable,
   } = useTable();
 
   const tableInputs = [
@@ -56,7 +58,6 @@ const CreateOrEditTable = () => {
       type: "select",
       selected: selectedNumberOfSeats,
       setSelected: setSelectedNumberOfSeats,
-      // gap: true,
     },
     {
       component: "Switch",
@@ -77,19 +78,18 @@ const CreateOrEditTable = () => {
   ];
   // component functions
   const onSubmit = () => {
-    // validation
+    if (selectedTableName === undefined)
+      return Notification.errorNotification("Select the table name.");
 
-    if (selectedTableName === "") {
-      Notification.errorNotification("Select the table name.");
-    }
+    if (selectedNumberOfSeats === undefined)
+      return Notification.errorNotification(
+        "Select the table's number of seats."
+      );
 
-    if (selectedNumberOfSeats === "") {
-      Notification.errorNotification("Select the table's number of seats.");
-    }
-
-    if (extendable && selectedNumberOfExtendingSeats === "") {
-      Notification.errorNotification("Select the extending number of seats.");
-    }
+    if (extendable && selectedNumberOfExtendingSeats === undefined)
+      return Notification.errorNotification(
+        "Select the extending number of seats."
+      );
 
     // validate if the chosen name has been taken by another table
     if (
@@ -116,15 +116,16 @@ const CreateOrEditTable = () => {
       if (Object.keys(tableEditData).length === 0) {
         setGlobalTable(null),
           setIsEditingTable(false),
-          setShowCreateOrEditTableModel(false),
-          Notification.errorNotification("Nothing to edit");
+          Notification.errorNotification("Nothing to edit"),
+          setShowCreateOrEditTableModel(false);
+
         return;
       }
     }
 
     //  actual creating or editing of the table
     isEditingTable
-      ? editTable(
+      ? updateTable(
           tableEditData,
           selectedTableName,
           selectedNumberOfSeats,

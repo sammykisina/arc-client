@@ -1,7 +1,5 @@
 import { atom } from "recoil";
 
-// modal atoms
-
 export const showCreateOrEditProductState = atom({
   key: "showCreateOrEditProductState",
   default: false,
@@ -24,6 +22,11 @@ export const showDeleteEmployeeModalState = atom({
 
 export const showCreateOrEditCategoryModalState = atom({
   key: "showCreateOrEditCategoryModalState",
+  default: false,
+});
+
+export const showDeleteCategoryModalState = atom({
+  key: "showDeleteCategoryModalState",
   default: false,
 });
 
@@ -54,5 +57,15 @@ export const showCreateOrEditTableModalState = atom({
 
 export const showDeleteTableModalState = atom({
   key: "showDeleteTableModalState",
+  default: false,
+});
+
+export const showCreateOrEditSupplierModalState = atom({
+  key: "showCreateOrEditSupplierModalState",
+  default: false,
+});
+
+export const showDeleteSupplierModalState = atom({
+  key: "showDeleteSupplierModalState",
   default: false,
 });

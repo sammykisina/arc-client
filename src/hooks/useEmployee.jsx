@@ -181,7 +181,7 @@ const useEmployee = () => {
     });
   };
 
-  const editEmployee = (
+  const updateEmployee = (
     editEmployeeData,
     first_name,
     last_name,
@@ -255,7 +255,7 @@ const useEmployee = () => {
             employee?.relationships?.role?.attributes.slug
           ),
           status: employee?.attributes?.active ? "active" : "inactive",
-          role: employee?.relationships?.role?.attributes.name,
+          role: employee?.relationships?.role?.attributes?.name,
           actions: [
             <div className="flex gap-x-3" key={employee?.attributes?.uuid}>
               <Icon
@@ -302,7 +302,7 @@ const useEmployee = () => {
     return employeesData;
   };
 
-  const getAllEmployee = () => {
+  const getAllEmployeeFromDB = () => {
     setIsFetchingEmployees(false);
 
     EmployeeAPI.getAll()
@@ -336,13 +336,14 @@ const useEmployee = () => {
     }
   };
 
-  const deleteEmployee = (uuid) => {
-    EmployeeAPI.delete(uuid).then((response) => {
+  const deleteEmployee = () => {
+    EmployeeAPI.delete(globalEmployee?.attributes?.uuid).then((response) => {
       if (response.error === 1) {
         Notification.errorNotification(response.message);
       } else {
         const newEmployees = allEmployeesFromDB.filter(
-          (employeeFromDB) => employeeFromDB?.attributes?.uuid !== uuid
+          (employeeFromDB) =>
+            employeeFromDB?.attributes?.uuid != globalEmployee?.attributes?.uuid
         );
 
         setAllEmployeesFromDB(newEmployees);
@@ -356,11 +357,11 @@ const useEmployee = () => {
     getCurrentAssignedEmployeeIDs,
     getEmployeeEditData,
     createEmployee,
-    editEmployee,
+    updateEmployee,
     employeesTableColumns,
     getEmployeesTableData,
     isFetchingEmployees,
-    getAllEmployee,
+    getAllEmployeeFromDB,
     deleteEmployee,
   };
 };

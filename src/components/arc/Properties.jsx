@@ -1,20 +1,22 @@
 import { useState } from "react";
-import { Tab, Tables } from "../components";
+import { Tab, Tables } from "../";
 
 const Properties = () => {
-  // page states
+  /**
+   * Component states
+   */
   const [index, setIndex] = useState(0);
   const propertiesTabs = [
     {
-      label: "Tables",
+      label: "TABLES",
       content: <Tables />,
     },
     {
-      label: "Others",
+      label: "OTHERS",
       content: "Others",
     },
   ];
-  // page functions
+
   return (
     <section>
       <Tab

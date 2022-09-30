@@ -79,11 +79,11 @@
   }
 
   .deleteActionButton {
-    @apply text-red-500 hover:text-red-300;
+    @apply text-red-500 hover:text-red-300 w-4 h-4;
   }
 
   .editActionButton {
-    @apply text-c_green hover:text-c_green/50;
+    @apply text-c_green hover:text-c_green/50 w-4 h-4;
   }
 
   .transition_linear {
@@ -91,7 +91,7 @@
   }
 
   .primaryButton {
-    @apply flex gap-x-2 px-6 py-3  rounded-xl text-white uppercase text-sm bg-c_yellow  hover:bg-c_yellow/80 items-center justify-center;
+    @apply flex gap-x-2 px-6 py-3  rounded-3xl text-white uppercase text-sm bg-c_yellow  hover:bg-c_yellow/80 items-center justify-center;
   }
 
   .toolTipBox {

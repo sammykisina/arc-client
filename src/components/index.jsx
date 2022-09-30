@@ -16,6 +16,8 @@ export { default as showCreateOrEditShift } from "./modal/modalComponents/Create
 export { default as CreateOrEditOrder } from "./modal/modalComponents/CreateOrEditOrder";
 export { default as CreateOrEditTable } from "./modal/modalComponents/CreateOrEditTable";
 export { default as DeleteTable } from "./modal/modalComponents/DeleteTable";
+export { default as CreateOrEditSupplier } from "./modal/modalComponents/CreateOrEditSupplier";
+export { default as DeleteSupplier } from "./modal/modalComponents/DeleteSupplier";
 
 // ui-html-small-components imports
 export { default as Icon } from "./ui-html-small-components/Icon";
@@ -50,5 +52,29 @@ export { default as AllCounterShelves } from "./counter/AllCounterShelves";
 export { default as Cart } from "./counter/Cart";
 export { default as Orders } from "./counter/Orders";
 
+/**
+ * ARC imports
+ */
+export { default as Products } from "./arc/Products";
+export { default as Properties } from "./arc/Properties";
+export { default as Suppliers } from "./arc/Suppliers";
+
+/**
+ * Suppliers sub components imports
+ */
+export { default as SuppliersList } from "./suppliers/SuppliersList";
+
 // properties imports
 export { default as Tables } from "./properties/Tables";
+
+/**
+ * Products imports
+ */
+export { default as ProductsAndVariants } from "./products/ProductsAndVariants";
+export { default as Categories } from "./products/Categories";
+
+/**
+ * Create Product imports
+ */
+export { default as Dependent } from "./create-product/Dependent";
+export { default as Independent } from "./create-product/Independent";

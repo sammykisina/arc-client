@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { CgClose } from "react-icons/cg";
 import { useRecoilValue, useRecoilState } from "recoil";
 import {
+  createProductDecisionTabsIndexState,
   currentUserRoleState,
   currentUserTokenState,
   isSidebarOpenState,
@@ -15,14 +16,15 @@ import {
   showCreateOrEditProductState,
   showCreateOrEditProductVariantModalState,
   showCreateOrEditShiftState,
+  showCreateOrEditSupplierModalState,
   showCreateOrEditTableModalState,
+  showDeleteCategoryModalState,
   showDeleteEmployeeModalState,
   showDeleteProductModalState,
   showDeleteProductVariantModalState,
+  showDeleteSupplierModalState,
   showDeleteTableModalState,
 } from "./atoms/ModalAtoms";
-import { showDeleteCategoryModalState } from "./atoms/CategoryAtom";
-import { isEditingProductState } from "./atoms/ProductAtom";
 import {
   Sidebar,
   TopHeader,
@@ -38,6 +40,8 @@ import {
   CreateOrEditOrder,
   CreateOrEditTable,
   DeleteTable,
+  CreateOrEditSupplier,
+  DeleteSupplier,
 } from "./components";
 import AppRoutes from "./routes/AppRoutes";
 import { useClickOutside } from "react-haiku";
@@ -61,34 +65,50 @@ const Layout = () => {
   );
   const [showCreateOrEditEmployeeModal, setShowCreateOrEditEmployeeModal] =
     useRecoilState(showCreateOrEditEmployeeModalState);
+
   const [showCreateOrEditCategoryModal, setShowCreateOrEditCategoryModal] =
     useRecoilState(showCreateOrEditCategoryModalState);
 
   const [showDeleteEmployeeModal, setShowDeleteEmployeeModal] = useRecoilState(
     showDeleteEmployeeModalState
   );
+
   const [showDeleteCategoryModal, setShowDeleteCategoryModal] = useRecoilState(
     showDeleteCategoryModalState
   );
+
   const [showDeleteProductModal, setShowDeleteProductModal] = useRecoilState(
     showDeleteProductModalState
   );
-  const isEditingProduct = useRecoilValue(isEditingProductState);
+
   const [
     showCreateOrEditProductVariantModal,
     setShowCreateOrEditProductVariantModal,
   ] = useRecoilState(showCreateOrEditProductVariantModalState);
+
   const [showDeleteProductVariantModal, setShowDeleteProductVariantModal] =
     useRecoilState(showDeleteProductVariantModalState);
+
   const [showCreateOrEditShift, setShowCreateOrEditShift] = useRecoilState(
     showCreateOrEditShiftState
   );
+
   const [showCreateOrEditOrderModal, setShowCreateOrEditOrderModal] =
     useRecoilState(showCreateOrEditOrderModalState);
+
   const [showCreateOrEditTableModal, setShowCreateOrEditTableModal] =
     useRecoilState(showCreateOrEditTableModalState);
+
   const [showDeleteTableModal, setShowDeleteTableModal] = useRecoilState(
     showDeleteTableModalState
+  );
+  const createProductDecisionTabsIndex = useRecoilValue(
+    createProductDecisionTabsIndexState
+  );
+  const [showCreateOrEditSupplierModal, setShowCreateOrEditSupplierModal] =
+    useRecoilState(showCreateOrEditSupplierModalState);
+  const [showDeleteSupplierModal, setShowDeleteSupplierModal] = useRecoilState(
+    showDeleteSupplierModalState
   );
 
   // component functions
@@ -124,7 +144,7 @@ const Layout = () => {
         </div>
         {/* the rest of the body */}
         <div
-          className={`p-2 flex-1 h-screen duration-300 max-w-[1200px] overflow-x-scroll scrollbar-hide  ${
+          className={`p-2 flex-1 h-fit sm:h-screen duration-300 max-w-[1200px] overflow-x-scroll scrollbar-hide ${
             isSidebarOpen ? "sm:ml-[200px]" : "sm:ml-24"
           }`}
         >
@@ -134,13 +154,13 @@ const Layout = () => {
           </div>
         </div>
         {/* the modals */}
-        {/* the add product modal */}
+        {/* the create or edit product modal */}
         <Modal
           modalState={showCreateOrEditProduct}
-          modalStyles={`${
-            isEditingProduct
+          modalStyles={`duration-300 ${
+            createProductDecisionTabsIndex === 0
               ? "h-[460px] sm:h-[350px]"
-              : "h-[500px] sm:h-[400px]"
+              : "h-[350px] sm:h-[290px]"
           } w-[95vw]`}
           closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
           close={() => setShowCreateOrEditProduct(false)}
@@ -149,7 +169,7 @@ const Layout = () => {
         {/* the delete product modal */}
         <Modal
           modalState={showDeleteProductModal}
-          modalStyles="w-[90vw] h-[330px] sm:h-[300px]"
+          modalStyles="w-[90vw] h-[280px] sm:h-[250px]"
           closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
           close={() => setShowDeleteProductModal(false)}
           component={<DeleteProduct />}
@@ -165,7 +185,7 @@ const Layout = () => {
         {/* the delete employee modal */}
         <Modal
           modalState={showDeleteEmployeeModal}
-          modalStyles="w-[90vw] h-[300px]"
+          modalStyles="w-[90vw] h-[280px] sm:h-[250px]"
           closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
           close={() => setShowDeleteEmployeeModal(false)}
           component={<DeleteEmployee />}
@@ -181,7 +201,7 @@ const Layout = () => {
         {/* the delete category modal */}
         <Modal
           modalState={showDeleteCategoryModal}
-          modalStyles="w-[90vw] h-[300px]"
+          modalStyles="w-[90vw] h-[300px] sm:h-[250px]"
           closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
           close={() => setShowDeleteCategoryModal(false)}
           component={<DeleteCategory />}
@@ -197,7 +217,7 @@ const Layout = () => {
         {/* the delete product variant modal */}
         <Modal
           modalState={showDeleteProductVariantModal}
-          modalStyles="w-[90vw] h-[330px] sm:h-[300px]"
+          modalStyles="w-[90vw] h-[300px] sm:h-[250px]"
           closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
           close={() => setShowDeleteProductVariantModal(false)}
           component={<DeleteProductVariant />}
@@ -205,7 +225,7 @@ const Layout = () => {
         {/* the create shift modal */}
         <Modal
           modalState={showCreateOrEditShift}
-          modalStyles="w-[90vw] h-[330px] sm:h-[300px]"
+          modalStyles="w-[90vw] h-[330px] sm:h-[260px]"
           closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
           close={() => setShowCreateOrEditShift(false)}
           component={<CreateOrEditShift />}
@@ -228,13 +248,31 @@ const Layout = () => {
           component={<CreateOrEditTable />}
         />
 
-        {/* the delete category modal */}
+        {/* the delete table modal */}
         <Modal
           modalState={showDeleteTableModal}
-          modalStyles="w-[90vw] h-[300px]"
+          modalStyles="w-[90vw] h-[280px] sm:h-[250px]"
           closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
           close={() => setShowDeleteTableModal(false)}
           component={<DeleteTable />}
+        />
+
+        {/* create or edit supplier modal */}
+        <Modal
+          modalState={showCreateOrEditSupplierModal}
+          modalStyles="w-[95vw] h-[500px] sm:h-[400px]"
+          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
+          close={() => setShowCreateOrEditSupplierModal(false)}
+          component={<CreateOrEditSupplier />}
+        />
+
+        {/* the delete supplier modal */}
+        <Modal
+          modalState={showDeleteSupplierModal}
+          modalStyles="w-[90vw] h-[280px] sm:h-[250px]"
+          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
+          close={() => setShowDeleteSupplierModal(false)}
+          component={<DeleteSupplier />}
         />
       </section>
     </BrowserRouter>

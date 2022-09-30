@@ -1,11 +1,5 @@
-// react framework imports
 import React from "react";
-
-// icon imports {react icons}
-
-// recoil imports {recoil and atoms}
 import { useSetRecoilState } from "recoil";
-import { globalItemHolderState } from "../../atoms/AppAtoms";
 import { globalCategoryState } from "../../atoms/CategoryAtom";
 import {
   globalProductVariantState,
@@ -15,17 +9,12 @@ import {
   globalProductState,
   isEditingProductState,
 } from "../../atoms/ProductAtom";
-
-// api layer imports
-
-// all components imports {local and packages}
 import { Icon } from "../";
 import { globalTableState } from "../../atoms/TableAtom";
 import { globalEmployeeState } from "../../atoms/EmployeeAtom";
 
 const Modal = ({ modalState, modalStyles, component, close, closeIcon }) => {
   // component states
-  const setGlobalItemHolder = useSetRecoilState(globalItemHolderState);
   const setGlobalCategory = useSetRecoilState(globalCategoryState);
   const setGlobalProduct = useSetRecoilState(globalProductState);
   const setIsEditingProduct = useSetRecoilState(isEditingProductState);

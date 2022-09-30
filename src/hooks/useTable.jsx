@@ -65,27 +65,6 @@ const useTable = () => {
     "Cream",
     "Sable",
   ];
-
-  /**
-   * Hook functions
-   */
-  const getCurrentlyAssignedTableNames = () => {
-    const tableNames = new Set();
-
-    allTablesFromDB.forEach((tableFromDB) => {
-      tableNames.add(tableFromDB.attributes?.name);
-    });
-
-    return [...tableNames.values()];
-  };
-
-  const getAllTables = () => {
-    setIsFetchingTables(true);
-    TableAPI.getAll()
-      .then((tables) => setAllTablesFromDB(tables))
-      .finally(() => setIsFetchingTables(false));
-  };
-
   const tablesColumns = useMemo(
     () => [
       {
@@ -125,6 +104,26 @@ const useTable = () => {
     []
   );
 
+  /**
+   * Hook functions
+   */
+  const getCurrentlyAssignedTableNames = () => {
+    const tableNames = new Set();
+
+    allTablesFromDB.forEach((tableFromDB) => {
+      tableNames.add(tableFromDB.attributes?.name);
+    });
+
+    return [...tableNames.values()];
+  };
+
+  const getAllTablesFromDB = () => {
+    setIsFetchingTables(true);
+    TableAPI.getAll()
+      .then((tables) => setAllTablesFromDB(tables))
+      .finally(() => setIsFetchingTables(false));
+  };
+
   const getTableEditData = (
     name,
     number_of_seats,
@@ -162,16 +161,16 @@ const useTable = () => {
 
   const createTable = (tableData) => {
     TableAPI.create(tableData).then((response) => {
-      if (response.error === 1) {
+      if (response.error === 1)
         Notification.errorNotification(response.message);
-      } else {
-        setAllTablesFromDB([response.table, ...allTablesFromDB]);
-        Notification.successNotification(response.message);
+      else {
+        setAllTablesFromDB([response.table, ...allTablesFromDB]),
+          Notification.successNotification(response.message);
       }
     });
   };
 
-  const editTable = (
+  const updateTable = (
     editTableData,
     name,
     number_of_seats,
@@ -213,13 +212,14 @@ const useTable = () => {
     );
   };
 
-  const deleteTable = (uuid) => {
-    TableAPI.delete(uuid).then((response) => {
-      if (response.error === 1) {
+  const deleteTable = () => {
+    TableAPI.delete(globalTable?.attributes?.uuid).then((response) => {
+      if (response.error === 1)
         Notification.errorNotification(response.message);
-      } else {
+      else {
         const newTables = allTablesFromDB.filter(
-          (tableFromDB) => tableFromDB?.attributes?.uuid != uuid
+          (tableFromDB) =>
+            tableFromDB?.attributes?.uuid != globalTable?.attributes?.uuid
         );
 
         setAllTablesFromDB(newTables);
@@ -228,7 +228,7 @@ const useTable = () => {
     });
   };
 
-  const getTablesData = () => {
+  const getTablesDataForTablesTable = () => {
     let tablesData = [];
 
     allTablesFromDB?.forEach((table) => {
@@ -281,14 +281,14 @@ const useTable = () => {
     numberOfSeatsOptions,
     tableNameOptions,
     getCurrentlyAssignedTableNames,
-    getAllTables,
-    createTable,
-    getTablesData,
-    tablesColumns,
-    deleteTable,
-    getTableEditData,
+    getAllTablesFromDB,
     isFetchingTables,
-    editTable,
+    createTable,
+    updateTable,
+    deleteTable,
+    getTablesDataForTablesTable,
+    tablesColumns,
+    getTableEditData,
   };
 };
 

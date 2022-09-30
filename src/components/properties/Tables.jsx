@@ -10,12 +10,16 @@ const Tables = () => {
   const setShowCreateOrEditTableModal = useSetRecoilState(
     showCreateOrEditTableModalState
   );
-  const { getAllTables, isFetchingTables, getTablesData, tablesColumns } =
-    useTable();
+  const {
+    getAllTablesFromDB,
+    isFetchingTables,
+    getTablesDataForTablesTable,
+    tablesColumns,
+  } = useTable();
 
   // component functions
   useEffect(() => {
-    getAllTables();
+    getAllTablesFromDB();
   }, []);
 
   return (
@@ -40,7 +44,7 @@ const Tables = () => {
         ) : (
           <Table
             columns={tablesColumns}
-            data={getTablesData()}
+            data={getTablesDataForTablesTable()}
             showFilters
             tableHeight="h-[350px] md:h-[380px] lg:h-[435px]"
           />

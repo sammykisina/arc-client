@@ -14,7 +14,9 @@ const StatusPill = ({ value }) => {
         status.startsWith("inactive") || status.startsWith("out-of-order")
           ? "bg-c_yellow/30 text-c_dark"
           : ""
-      }`}
+      } ${
+        status.startsWith("underreview") ? "bg-orange-400 text-white" : ""
+      } ${status.startsWith("suspended") ? "bg-red-400 text-white" : ""}  `}
     >
       {status}
     </span>

@@ -1,5 +1,4 @@
-const withMT = require("@material-tailwind/react/utils/withMT");
-module.exports = withMT({
+module.exports = {
   mode: "jit",
   // purge: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
@@ -45,4 +44,4 @@ module.exports = withMT({
     require("tailwindcss-textshadow"),
     require("tailwind-scrollbar-hide"),
   ],
-});
+};
