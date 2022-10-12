@@ -12,6 +12,7 @@ import {
 import { Icon } from "../";
 import { globalTableState } from "../../atoms/TableAtom";
 import { globalEmployeeState } from "../../atoms/EmployeeAtom";
+import { globalSupplierState } from "../../atoms/SuppliersListAtom";
 
 const Modal = ({ modalState, modalStyles, component, close, closeIcon }) => {
   // component states
@@ -24,6 +25,7 @@ const Modal = ({ modalState, modalStyles, component, close, closeIcon }) => {
   );
   const setGlobalEmployee = useSetRecoilState(globalEmployeeState);
   const setGlobalTable = useSetRecoilState(globalTableState);
+  const setGlobalSupplier = useSetRecoilState(globalSupplierState);
 
   return (
     <section
@@ -41,6 +43,7 @@ const Modal = ({ modalState, modalStyles, component, close, closeIcon }) => {
             setIsEditingProductVariant(null);
             setIsEditingProduct(false);
             setGlobalTable(null);
+            setGlobalSupplier(null);
           }}
           iconWrapperStyles="p-1 w-fit h-fit  rounded-full flex justify-center items-center z-50 bg-c_green_light"
         />

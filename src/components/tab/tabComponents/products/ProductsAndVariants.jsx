@@ -1,13 +1,13 @@
 import { useEffect, useCallback } from "react";
 import { HiPlus } from "react-icons/hi";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { Button, SpinnerLoader, Table } from "../";
-import { isSidebarOpenState } from "../../atoms/AppAtoms";
+import { Button, SpinnerLoader, Table } from "../../../";
+import { isSidebarOpenState } from "../../../../atoms/AppAtoms";
 import {
   showCreateOrEditProductState,
   showCreateOrEditProductVariantModalState,
-} from "../../atoms/ModalAtoms";
-import { useProduct, useProductVariant } from "../../hooks";
+} from "../../../../atoms/ModalAtoms";
+import { useProduct, useProductVariant } from "../../../../hooks";
 
 const ProductsAndVariants = () => {
   /**
@@ -56,7 +56,7 @@ const ProductsAndVariants = () => {
                 row.original.product
               )}
               showPagination={false}
-              showFilters={false}
+              showFilters
             />
           ) : (
             <div className="text-c_dark px-10 text-sm  tracking-wider">

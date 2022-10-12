@@ -104,7 +104,9 @@ const CreateOrEditCategory = () => {
                   className="input"
                 />
 
-                <label className="placeholder">{categoryInput.label}</label>
+                <label className="placeholder border">
+                  {categoryInput.label}
+                </label>
 
                 {errors[categoryInput.name] && (
                   <span className="error">{categoryInput.errorMessage}</span>
@@ -117,7 +119,7 @@ const CreateOrEditCategory = () => {
                     type={categoryInput.type}
                     placeholder={categoryInput.placeholder}
                     {...register(categoryInput.name, { required: true })}
-                    className="input"
+                    className="input scrollbar-hide"
                     rows="3"
                   />
 

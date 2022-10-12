@@ -9,7 +9,10 @@ import {
   globalCategoryState,
   isEditingCategoryState,
 } from "../atoms/CategoryAtom";
-import { showDeleteCategoryModalState } from "../atoms/ModalAtoms";
+import {
+  showCreateOrEditCategoryModalState,
+  showDeleteCategoryModalState,
+} from "../atoms/ModalAtoms";
 import { Icon } from "../components";
 import { NameUuidCell } from "../components/ui-reusable-small-components/table";
 import { Notification } from "../utils/notifications";
@@ -28,6 +31,9 @@ const useCategory = () => {
   const [globalCategory, setGlobalCategory] =
     useRecoilState(globalCategoryState);
   const [isFetchingCategories, setIsFetchingCategories] = useState(false);
+  const setShowCreateOrEditCategoryModal = useSetRecoilState(
+    showCreateOrEditCategoryModalState
+  );
 
   const categoryInputs = [
     {
@@ -54,8 +60,6 @@ const useCategory = () => {
           {
             Header: "Name",
             accessor: "name",
-            Cell: NameUuidCell,
-            uuidAccessor: "uuid",
           },
           {
             Header: "Description",
@@ -189,7 +193,10 @@ const useCategory = () => {
               />
               <Icon
                 icon={<RiEditCircleFill className="editActionButton" />}
-                purpose={() => handleEditCategory(categoryFromDB)}
+                purpose={() => {
+                  setGlobalCategory(categoryFromDB),
+                    setShowCreateOrEditCategoryModal(true);
+                }}
               />
             </div>,
           ],

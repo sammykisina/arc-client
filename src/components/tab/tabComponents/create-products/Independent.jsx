@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useProduct } from "../../hooks";
-import { Button, CheckBox, Select } from "../";
+import { useProduct } from "../../../../hooks";
+import { Button, CheckBox, Select } from "../../..";
 import { useForm } from "react-hook-form";
 import { BsSave } from "react-icons/bs";
-import { Notification } from "../../utils/notifications";
-import { showCreateOrEditProductState } from "../../atoms/ModalAtoms";
+import { Notification } from "../../../../utils/notifications";
+import { showCreateOrEditProductState } from "../../../../atoms/ModalAtoms";
 import {
   globalProductState,
   isEditingProductState,
-} from "../../atoms/ProductAtom";
+} from "../../../../atoms/ProductAtom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEffect } from "react";
 

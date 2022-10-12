@@ -21,8 +21,10 @@ const CreateOrEditSupplier = () => {
     getCurrentlyAssignedSupplierNames,
     getSupplierEditData,
     updateSupplier,
+    selectedStatus,
+    setSelectedStatus,
+    selectedSupplierSupplyItems,
   } = useSuppliersList();
-  const [selectedStatus, setSelectedStatus] = useState("");
   const [isEditingSupplier, setIsEditingSupplier] = useRecoilState(
     isEditingSupplierState
   );
@@ -44,7 +46,14 @@ const CreateOrEditSupplier = () => {
   const onSubmit = ({ name, location, phone_number, email }) => {
     // validation
     if (selectedStatus === "") {
-      Notification.errorNotification("Current Supplier Status is required");
+      Notification.errorNotification("Current Supplier Status is required.");
+      return;
+    }
+
+    if (!isEditingSupplier && selectedSupplierSupplyItems.length === 0) {
+      Notification.errorNotification(
+        "Choose the Items Supplied By This Supplier."
+      );
       return;
     }
 
@@ -93,6 +102,7 @@ const CreateOrEditSupplier = () => {
           phone_number,
           email,
           status: selectedStatus?.value,
+          items: selectedSupplierSupplyItems,
         });
 
     setShowCreateOrEditSupplierModal(false);
@@ -153,18 +163,21 @@ const CreateOrEditSupplier = () => {
               <Select
                 title=""
                 options={supplierInput.options}
-                selectWrapperStyles="w-full rounded-md ring-c_gray  py-2 px-2"
+                selectWrapperStyles={`w-full rounded-md ring-c_gray  py-2 px-2 ${
+                  isEditingSupplier && supplierInput.extraStyles
+                }`}
                 selectPanelStyles="ring-c_gray/40 shadow h-[90px]"
-                selected={selectedStatus}
-                setSelected={(option) => setSelectedStatus(option)}
+                selected={supplierInput.selected}
+                setSelected={(option) => supplierInput.setSelected(option)}
                 selectLabel={supplierInput.label}
                 selectLabelStyles="border text-base text-c_dark/50 rounded-full px-1"
+                multiple={supplierInput.multiple}
               />
             )}
           </div>
         ))}
 
-        <div className="absolute -bottom-[100px]  right-0">
+        <div className="absolute -bottom-[100px] sm:-bottom-[120px] right-0">
           <Button
             title="Save"
             icon={<BsSave className="w-5 h-5 text-white" />}

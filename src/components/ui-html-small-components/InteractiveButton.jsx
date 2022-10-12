@@ -13,6 +13,8 @@ const InteractiveButton = ({
   buttonWrapperStyles,
   purpose,
   arrowsPosition,
+  defaultIcon,
+  hoverIcon,
 }) => {
   /**
    * component states
@@ -37,23 +39,15 @@ const InteractiveButton = ({
         <div className="flex justify-between items-center">
           <span>{title}</span>
           <Icon
-            icon={
-              buttonHovered ? (
-                <IoIosArrowRoundForward />
-              ) : (
-                <MdKeyboardArrowRight />
-              )
-            }
-            iconWrapperStyles="ml-[8px] text-xl"
+            icon={buttonHovered ? hoverIcon : defaultIcon}
+            iconWrapperStyles="ml-[8px] text-xl duration-300"
           />
         </div>
       ) : (
         <div className="flex justify-between items-center">
           <Icon
-            icon={
-              buttonHovered ? <IoIosArrowRoundBack /> : <MdKeyboardArrowLeft />
-            }
-            iconWrapperStyles="mr-[8px] text-xl"
+            icon={buttonHovered ? hoverIcon : defaultIcon}
+            iconWrapperStyles="mr-[8px] text-xl duration-300"
           />
 
           <span>{title}</span>

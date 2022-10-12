@@ -94,3 +94,21 @@ import { useCallback } from "react";
     </section>
   );
 }
+
+const selectOption = (option) => {
+  if (multiple) {
+    if (
+      selected.find((singleSelected) => singleSelected.value === option.value)
+    ) {
+      setSelected(
+        selected.filter(
+          (selectedOption) => selectedOption.value != option.value
+        )
+      );
+    } else {
+      setSelected([...selected, option]);
+    }
+  } else {
+    if (option != selected) setSelected(option);
+  }
+};

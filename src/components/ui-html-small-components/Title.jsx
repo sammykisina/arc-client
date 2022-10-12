@@ -6,7 +6,7 @@ const Title = ({ title, titleStyles }) => {
       className={`${
         titleStyles
           ? titleStyles
-          : "text-sm text-c_dark leading-tight tracking-wider font-semibold text-shadow"
+          : "text-sm text-c_dark leading-tight tracking-wider font-semibold text-shadow mb-1"
       }`}
     >
       {title}

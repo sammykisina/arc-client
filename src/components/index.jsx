@@ -18,6 +18,7 @@ export { default as CreateOrEditTable } from "./modal/modalComponents/CreateOrEd
 export { default as DeleteTable } from "./modal/modalComponents/DeleteTable";
 export { default as CreateOrEditSupplier } from "./modal/modalComponents/CreateOrEditSupplier";
 export { default as DeleteSupplier } from "./modal/modalComponents/DeleteSupplier";
+export { default as AddSupplyItem } from "./modal/modalComponents/AddSupplyItem";
 
 // ui-html-small-components imports
 export { default as Icon } from "./ui-html-small-components/Icon";
@@ -29,6 +30,7 @@ export { default as ToolTip } from "./ui-html-small-components/ToolTip";
 export { default as CheckBox } from "./ui-html-small-components/CheckBox";
 export { default as MultiSelect } from "./ui-html-small-components/MultiSelect";
 export { default as InteractiveButton } from "./ui-html-small-components/InteractiveButton";
+export { default as Dropdown } from "./ui-html-small-components/Dropdown";
 
 // ui-reusable-small-components
 export { default as SidebarLink } from "./ui-reusable-small-components/SidebarLink";
@@ -40,7 +42,6 @@ export { default as Table } from "./ui-reusable-small-components/table/Table";
 export { default as TableTwo } from "./ui-reusable-small-components/table/Table";
 export { default as SpinnerLoader } from "./ui-reusable-small-components/SpinnerLoader";
 export { default as Line } from "./ui-reusable-small-components/Line";
-export { default as Tab } from "./ui-reusable-small-components/Tab";
 export { default as Stepper } from "./ui-reusable-small-components/Stepper";
 export { default as DeleteItem } from "./ui-reusable-small-components/DeleteItem";
 
@@ -53,28 +54,21 @@ export { default as Cart } from "./counter/Cart";
 export { default as Orders } from "./counter/Orders";
 
 /**
- * ARC imports
+ * Tabs  imports
  */
-export { default as Products } from "./arc/Products";
-export { default as Properties } from "./arc/Properties";
-export { default as Suppliers } from "./arc/Suppliers";
+export { default as Tab } from "./tab/Tab";
+export { default as Dependent } from "./tab/tabComponents/create-products/Dependent";
+export { default as Independent } from "./tab/tabComponents/create-products/Independent";
 
-/**
- * Suppliers sub components imports
- */
-export { default as SuppliersList } from "./suppliers/SuppliersList";
+export { default as Products } from "./tab/tabComponents/arc/Products";
+// products own tabs
+export { default as ProductsAndVariants } from "./tab/tabComponents/products/ProductsAndVariants";
+export { default as Categories } from "./tab/tabComponents/products/Categories";
 
-// properties imports
-export { default as Tables } from "./properties/Tables";
+export { default as Properties } from "./tab/tabComponents/arc/Properties";
+// properties own tabs
+export { default as Tables } from "./tab/tabComponents/properties/Tables";
 
-/**
- * Products imports
- */
-export { default as ProductsAndVariants } from "./products/ProductsAndVariants";
-export { default as Categories } from "./products/Categories";
-
-/**
- * Create Product imports
- */
-export { default as Dependent } from "./create-product/Dependent";
-export { default as Independent } from "./create-product/Independent";
+export { default as Suppliers } from "./tab/tabComponents/arc/Suppliers";
+// suppliers own tabs
+export { default as SuppliersList } from "./tab/tabComponents/suppliers/SuppliersList";

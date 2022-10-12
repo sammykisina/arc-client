@@ -18,6 +18,7 @@ import {
   showCreateOrEditShiftState,
   showCreateOrEditSupplierModalState,
   showCreateOrEditTableModalState,
+  showAddSupplyItemModalState,
   showDeleteCategoryModalState,
   showDeleteEmployeeModalState,
   showDeleteProductModalState,
@@ -42,6 +43,7 @@ import {
   DeleteTable,
   CreateOrEditSupplier,
   DeleteSupplier,
+  AddSupplyItem,
 } from "./components";
 import AppRoutes from "./routes/AppRoutes";
 import { useClickOutside } from "react-haiku";
@@ -107,8 +109,13 @@ const Layout = () => {
   );
   const [showCreateOrEditSupplierModal, setShowCreateOrEditSupplierModal] =
     useRecoilState(showCreateOrEditSupplierModalState);
+
   const [showDeleteSupplierModal, setShowDeleteSupplierModal] = useRecoilState(
     showDeleteSupplierModalState
+  );
+
+  const [showAddSupplyItemModal, setShowAddSupplyItemModal] = useRecoilState(
+    showAddSupplyItemModalState
   );
 
   // component functions
@@ -273,6 +280,15 @@ const Layout = () => {
           closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
           close={() => setShowDeleteSupplierModal(false)}
           component={<DeleteSupplier />}
+        />
+
+        {/* create supply item modal */}
+        <Modal
+          modalState={showAddSupplyItemModal}
+          modalStyles="w-[90vw] h-[250px]"
+          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
+          close={() => setShowAddSupplyItemModal(false)}
+          component={<AddSupplyItem />}
         />
       </section>
     </BrowserRouter>

@@ -24,23 +24,49 @@ const Select = ({
    */
   const selectOption = (option) => {
     if (multiple) {
-      if (selected.includes(option)) {
-        setSelected(
-          selected.filter((selectedOption) => selectedOption != option)
-        );
-      } else {
-        setSelected([...selected, option]);
-      }
+      option?.name
+        ? selected.find(
+            (singleSelected) =>
+              singleSelected?.name?.toLowerCase() ===
+              option?.name?.toLowerCase()
+          )
+          ? setSelected(
+              selected.filter(
+                (selectedOption) =>
+                  selectedOption?.name?.toLowerCase() !=
+                  option?.name?.toLowerCase()
+              )
+            )
+          : setSelected([...selected, option])
+        : selected.includes(option)
+        ? setSelected(
+            selected.filter((selectedOption) => selectedOption != option)
+          )
+        : setSelected([...selected, option]);
     } else {
       if (option != selected) setSelected(option);
     }
   };
 
+  const getClasses = (option) => {
+    let bgColor = "";
+    if (multiple) {
+      selected?.find((selectedElement) => {
+        if (
+          selectedElement?.name.toLowerCase() === option?.name.toLowerCase()
+        ) {
+          bgColor = "bg-c_yellow/60 w-fit";
+        }
+      });
+    }
+
+    return bgColor;
+  };
+
   return (
     <section
       tabIndex={0}
-      className={`relative min-h-[1.5em] h-fit ring-1 cursor-pointer flex 
-      items-center gap-[.5em] outline-none focus:border-c_yellow rounded-md ${selectWrapperStyles}`}
+      className={`relative min-h-[1.5em] h-fit ring-1 cursor-pointer gap-[.5em] outline-none focus:border-c_yellow rounded-md ${selectWrapperStyles}`}
       onClick={() =>
         setIsSelectPanelOpen(
           (prevIsSelectPanelOpenState) => !prevIsSelectPanelOpenState
@@ -48,44 +74,48 @@ const Select = ({
       }
       onBlur={() => setIsSelectPanelOpen(false)}
     >
-      <div className="flex-1 w-full flex gap-1 capitalize text-c_gray text-sm  overflow-x-auto scrollbar-hide">
-        {selected
-          ? multiple
-            ? selected.map((selectedOption, selectedOptionIndex) => (
-                <Button
-                  key={selectedOptionIndex}
-                  buttonStyles="flex justify-center items-center gap-1 border rounded-full px-1 w-[120px]"
-                  title={
-                    selectedOption.name ? selectedOption.name : selectedOption
-                  }
-                  buttonTitleWrapperStyles="capitalize text-sm"
-                  icon={<HiX className="w-3 h-3" />}
-                  purpose={(event) => {
-                    event.stopPropagation();
-                    selectOption(selectedOption);
-                  }}
-                />
-              ))
-            : selected.name
-            ? selected.name
-            : selected
-          : title}
+      <div className={`flex items-center gap-1 `}>
+        <div className="flex flex-1 gap-1 capitalize text-c_gray text-sm  overflow-x-auto scrollbar-hide">
+          {selected
+            ? multiple
+              ? selected.map((selectedOption, selectedOptionIndex) => (
+                  <Button
+                    key={selectedOptionIndex}
+                    buttonStyles="flex justify-center items-center gap-1 border rounded-full px-1 w-full truncate"
+                    title={
+                      selectedOption.name ? selectedOption.name : selectedOption
+                    }
+                    buttonTitleWrapperStyles="capitalize text-sm"
+                    icon={<HiX className="w-3 h-3" />}
+                    purpose={(event) => {
+                      event.stopPropagation();
+                      selectOption(selectedOption);
+                    }}
+                  />
+                ))
+              : selected.name
+              ? selected.name
+              : selected
+            : title}
+        </div>
+
+        <div className="flex items-center">
+          <Icon
+            icon={<HiX className="w-3 h-3" />}
+            purpose={(event) => {
+              event.stopPropagation();
+              multiple ? setSelected([]) : setSelected("");
+            }}
+          />
+
+          <div className=" bg-c_dark items-stretch w-[.05rem]" />
+          <BiChevronDown
+            className={`w-6 h-6 text-c_gray duration-300 ${
+              isSelectPanelOpen && "rotate-180"
+            }`}
+          />
+        </div>
       </div>
-
-      <Icon
-        icon={<HiX className="w-3 h-3" />}
-        purpose={(event) => {
-          event.stopPropagation();
-          multiple ? setSelected([]) : setSelected("");
-        }}
-      />
-
-      <div className="divider bg-c_dark items-stretch w-[.05rem]" />
-      <BiChevronDown
-        className={`w-6 h-6 text-c_gray duration-300 ${
-          isSelectPanelOpen && "rotate-180"
-        }`}
-      />
 
       <ul
         className={`overflow-y-auto ring-1 rounded-md w-full absolute left-0 top-[calc(100%+.25rem)]
@@ -100,11 +130,11 @@ const Select = ({
               setIsSelectPanelOpen(false);
             }}
             key={optionIndex}
-            className={`capitalize hover:bg-c_yellow/60 rounded-2xl w-full px-2 py-1 text-c_dark   ${
+            className={`capitalize hover:bg-c_yellow rounded-2xl w-fit px-2 py-1 text-c_dark ${
               option === selected ? "bg-c_yellow/60" : ""
-            }`}
+            } ${option?.name && getClasses(option)}`}
           >
-            {option.name ? option.name : option}
+            {option?.name ? option?.name : option}
           </li>
         ))}
       </ul>

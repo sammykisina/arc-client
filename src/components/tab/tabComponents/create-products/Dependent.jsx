@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useProduct } from "../../hooks";
-import { Button, Select } from "../";
+import { useProduct } from "../../../../hooks";
+import { Button, Select } from "../../..";
 import { BsSave } from "react-icons/bs";
-import { Notification } from "../../utils/notifications";
+import { Notification } from "../../../../utils/notifications";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   globalProductState,
   isEditingProductState,
-} from "../../atoms/ProductAtom";
-import { showCreateOrEditProductState } from "../../atoms/ModalAtoms";
+} from "../../../../atoms/ProductAtom";
+import { showCreateOrEditProductState } from "../../../../atoms/ModalAtoms";
 import { useEffect } from "react";
-import { createProductDecisionTabsIndexState } from "../../atoms/AppAtoms";
+import { createProductDecisionTabsIndexState } from "../../../../atoms/AppAtoms";
 
 const Dependent = () => {
   /**

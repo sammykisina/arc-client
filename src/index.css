@@ -8,6 +8,10 @@
     url(./fonts/Lexend/static/Lexend-Regular.ttf) format("truetype");
 }
 
+:root {
+  --transition-cubic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 @layer base {
   body {
     font-family: "lexend";
@@ -58,7 +62,7 @@
   }
 
   .input {
-    @apply px-5 py-2 bg-white rounded-md outline-none text-c_dark border border-c_gray w-full;
+    @apply px-5 py-2 bg-white rounded-md outline-none text-c_dark border border-c_gray w-full mt-1;
   }
 
   .placeholder {
@@ -125,5 +129,36 @@
   .complete:not(:first-child):before,
   .activeStep:not(:first-child):before {
     @apply bg-c_green;
+  }
+
+  /* notification */
+  .notification-icon {
+    @apply w-4 h-4 text-c_green;
+  }
+
+  .notification-item {
+    @apply grid grid-cols-4 sm:flex  items-center text-c_dark p-[10px] gap-2 hover:bg-c_gray/50 rounded-md cursor-pointer;
+  }
+
+  /* drop down */
+  .dropdown__content {
+    transform-origin: top right;
+    transform: scale(0);
+    transition: transform 0.3s ease 0s;
+  }
+
+  .dropdown__content.active {
+    transform: scale(1);
+    transition: transform 0.5s var(--transition-cubic);
+  }
+
+  .dropdown__footer {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .topnav__right-item-icon {
+    font-size: 20px;
+    color: var(--txt-color);
   }
 }

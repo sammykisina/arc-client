@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Categories, ProductsAndVariants, Tab } from "../";
+import { Categories, ProductsAndVariants, Tab } from "../../../";
 
 const Product = () => {
   /**

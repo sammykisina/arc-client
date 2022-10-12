@@ -4,3 +4,4 @@ export { default as useCategory } from "./useCategory";
 export { default as useProduct } from "./useProduct";
 export { default as useProductVariant } from "./useProductVariant";
 export { default as useShift } from "./useShift";
+export { default as useSuppliersList } from "./useSuppliersList";

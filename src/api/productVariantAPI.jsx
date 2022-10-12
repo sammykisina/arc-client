@@ -4,7 +4,7 @@ import { defineCancelApiObject } from "./configs/axiosUtils";
 export const ProductVariantAPI = {
   getAll: async (cancel = false) => {
     const response = await api.request({
-      url: "/admin/variant",
+      url: "/admin/variant?include=product",
       method: "GET",
       signal: cancel
         ? cancelApiObject[get.name].handleRequestCancellation().signal

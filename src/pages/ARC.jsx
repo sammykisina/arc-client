@@ -11,10 +11,15 @@ import { RiBringForward } from "react-icons/ri";
 import { Tab } from "../components";
 import { Products, Properties, Suppliers } from "../components";
 import { useState } from "react";
+import { useEffect } from "react";
+import { useProduct, useProductVariant, useSuppliersList } from "../hooks";
 
 const ARC = () => {
   // page states
   const [index, setIndex] = useState(0);
+  const { getAllSuppliersFromDB } = useSuppliersList();
+  const { getAllProductsFromDB } = useProduct();
+  const { getAllProductVariantsFromDB } = useProductVariant();
   const data = [
     {
       label: "Inventory",
@@ -41,6 +46,16 @@ const ARC = () => {
       content: <Suppliers />,
     },
   ];
+
+  // get some global need data
+  useEffect(() => {
+    Promise.all([
+      getAllProductsFromDB(),
+      getAllProductVariantsFromDB(),
+      getAllSuppliersFromDB(),
+    ]);
+  }, []);
+
   return (
     <section>
       <Tab

@@ -167,34 +167,26 @@ const CreateOrEditProductVariant = () => {
 
       {/* fields */}
       <div className="sm:flex justify-center items-center">
-        <form className={formStyles} onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="h-[350px] sm:h-[250px] overflow-auto sm:items-center px-1 flex flex-col gap-5 sm:grid grid-cols-2 mt-4 sm:mt-0 pt-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {productVariantInputs.map(
             (productVariantInput, productVariantInputIndex) => (
-              <div
-                key={productVariantInputIndex}
-                className={`h-fit ${
-                  productVariantInput.gap && "mt-5 sm:mt-0 "
-                }`}
-              >
+              <div key={productVariantInputIndex}>
                 {productVariantInput.component === "Select" ? (
-                  <div className="input-group w-[250px] sm:w-[220px] md:w-[240px]">
-                    <div className="input">
-                      <Select
-                        title="-"
-                        options={productVariantInput.options}
-                        selected={selectedProduct}
-                        setSelected={setSelectedProduct}
-                      />
-                    </div>
-
-                    <label className="placeholder">
-                      {productVariantInput.label}
-                    </label>
-                  </div>
+                  <Select
+                    title=""
+                    options={productVariantInput.options}
+                    selectWrapperStyles="w-full rounded-md ring-c_gray  py-2 px-2"
+                    selectPanelStyles="ring-c_gray/40 shadow h-[70px]"
+                    selected={selectedProduct}
+                    setSelected={(option) => setSelectedProduct(option)}
+                    selectLabel={productVariantInput.label}
+                    selectLabelStyles="border text-base text-c_dark/50 rounded-full px-1"
+                  />
                 ) : productVariantInput.component === "Input" ? (
-                  <div
-                    className={`input-group w-[250px] sm:w-[220px] md:w-[240px]`}
-                  >
+                  <div className={`input-group`}>
                     <input
                       type={productVariantInput.type}
                       placeholder=""
@@ -204,7 +196,7 @@ const CreateOrEditProductVariant = () => {
                       className="input"
                     />
 
-                    <label className="placeholder">
+                    <label className="placeholder border">
                       {productVariantInput.label}
                     </label>
 
@@ -215,17 +207,13 @@ const CreateOrEditProductVariant = () => {
                     )}
                   </div>
                 ) : (
-                  <div
-                    className={`mt-1 ml-2 sm:ml-4 w-[250px] sm:w-[200px] md:w-[240px]`}
-                  >
-                    <CheckBox
-                      label="VAT"
-                      checkLabelStyles="text-c_dark"
-                      checkIconStyles="text-c_yellow"
-                      isChecked={allowVAT}
-                      setIsChecked={setAllowVAT}
-                    />
-                  </div>
+                  <CheckBox
+                    label="VAT"
+                    checkLabelStyles="text-c_dark"
+                    checkIconStyles="text-c_yellow"
+                    isChecked={allowVAT}
+                    setIsChecked={setAllowVAT}
+                  />
                 )}
               </div>
             )

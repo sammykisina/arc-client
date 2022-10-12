@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Tab, Tables } from "../";
+import { Tab, Tables } from "../../../";
 
 const Properties = () => {
   /**

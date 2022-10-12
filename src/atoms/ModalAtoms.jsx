@@ -69,3 +69,13 @@ export const showDeleteSupplierModalState = atom({
   key: "showDeleteSupplierModalState",
   default: false,
 });
+
+export const showAddSupplyItemModalState = atom({
+  key: "showAddSupplyItemModalState",
+  default: false,
+});
+
+export const showEditSupplyItemModalState = atom({
+  key: "showEditSupplyItemModalState",
+  default: false,
+});

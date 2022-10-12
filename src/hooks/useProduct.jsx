@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { BsCheck2All } from "react-icons/bs";
-import { HiChevronDown } from "react-icons/hi";
-import { IoIosClose } from "react-icons/io";
-import { MdDelete } from "react-icons/md";
+import { BsCheck2All, BsCheck2Circle } from "react-icons/bs";
+import { HiArrowNarrowRight, HiChevronDown, HiPlusSm } from "react-icons/hi";
+import { IoIosArrowRoundForward, IoIosClose } from "react-icons/io";
+import { MdDelete, MdKeyboardArrowRight } from "react-icons/md";
 import { RiEditCircleFill } from "react-icons/ri";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { ProductAPI } from "../api/productAPI";
@@ -159,8 +159,6 @@ const useProduct = () => {
           {
             Header: "Name",
             accessor: "name",
-            Cell: NameUuidCell,
-            uuidAccessor: "uuid",
           },
           {
             Header: "Category",
@@ -457,9 +455,9 @@ const useProduct = () => {
               <Icon
                 icon={
                   productFromDB?.attributes?.vat ? (
-                    <BsCheck2All className="text-c_green w-5 h-5" />
+                    <BsCheck2Circle className="text-c_green w-4 h-4" />
                   ) : (
-                    <IoIosClose className="text-red-400 w-5 h-5" />
+                    <BsCheck2Circle className="text-red-400 w-4 h-4" />
                   )
                 }
               />
@@ -495,9 +493,11 @@ const useProduct = () => {
               />
               {productFromDB?.attributes?.form === "independent" && (
                 <InteractiveButton
-                  title="Add Stock"
+                  title="Stock"
                   buttonWrapperStyles={`text-center py-1 px-4 bg-c_yellow rounded-full text-white w-fit text-xs uppercase`}
-                  arrowsPosition="right"
+                  arrowsPosition="left"
+                  defaultIcon={<HiPlusSm />}
+                  hoverIcon={<HiArrowNarrowRight />}
                   purpose={() => {}}
                 />
               )}

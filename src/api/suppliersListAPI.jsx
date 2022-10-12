@@ -4,7 +4,7 @@ import { defineCancelApiObject } from "./configs/axiosUtils";
 export const SuppliersListsAPI = {
   getAll: async (cancel = false) => {
     const response = await api.request({
-      url: "/admin/suppliers",
+      url: "/admin/suppliers?include=variants.product,products",
       signal: cancel
         ? cancelApiObject[get.name].handleRequestCancellation().signal
         : undefined,
@@ -39,10 +39,11 @@ export const SuppliersListsAPI = {
     return response.data;
   },
 
-  delete: async (uuid, cancel = false) => {
+  delete: async (data, cancel = false) => {
     const response = await api.request({
-      url: `/admin/suppliers/${uuid}`,
+      url: `/admin/suppliers`,
       method: "DELETE",
+      data: data,
       signal: cancel
         ? cancelApiObject[get.name].handleRequestCancellation().signal
         : undefined,

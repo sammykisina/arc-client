@@ -1,14 +1,6 @@
-// react framework imports
-import React, { useState } from "react";
 import { useDeferredValue } from "react";
 import { useRecoilValue } from "recoil";
-
-// icon imports {react icons}
-
-// api layer imports
-
-// all components imports {local and packages}
-import { Button, Line, ToolTip } from "../";
+import { Button, Line, ToolTip } from "..";
 import { cartItemsState } from "../../atoms/CartAtom";
 import { allOrdersFromDBState } from "../../atoms/OrderAtom";
 
@@ -22,12 +14,16 @@ const Tab = ({
   index,
   setIndex,
 }) => {
-  // component states
+  /**
+   * Component states
+   */
   const { content } = tabsData[index];
   const cartItems = useRecoilValue(cartItemsState);
   const allOrdersFromDB = useRecoilValue(allOrdersFromDBState);
 
-  // component functions
+  /**
+   * Component functions
+   */
   const getBargeValue = (type) => {
     switch (type) {
       case "cartItemsBarge":
@@ -74,14 +70,13 @@ const Tab = ({
                 tipTitle={singleTabsData.label}
               />
             ) : (
-              <div className={`duration-300`} key={singleTabsDataIndex}>
+              <div className={`duration-300 `} key={singleTabsDataIndex}>
                 <Button
                   title={singleTabsData.label}
-                  buttonTitleWrapperStyles={`tracking-wider`}
-                  buttonStyles={`w-fit duration-300  ${
+                  buttonStyles={`w-fit duration-300 hover:text-c_dark text-sm ${
                     singleTabsDataIndex === index
-                      ? "text-c_dark font-semibold"
-                      : "text-c_dark"
+                      ? "text-c_dark font-semibold tracking-wider"
+                      : "text-c_gray"
                   }`}
                   purpose={() => setIndex(singleTabsDataIndex)}
                 />

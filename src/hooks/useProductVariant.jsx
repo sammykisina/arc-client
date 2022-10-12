@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
-import { BsCheck2All } from "react-icons/bs";
-import { IoIosClose } from "react-icons/io";
+import { BsCheck2Circle } from "react-icons/bs";
+import { HiArrowNarrowRight, HiPlusSm } from "react-icons/hi";
 import { MdDelete } from "react-icons/md";
 import { RiEditCircleFill } from "react-icons/ri";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -18,11 +18,9 @@ import {
   globalProductVariantState,
   isEditingProductVariantState,
 } from "../atoms/VariantAtom";
-import { Icon } from "../components";
+import { Icon, InteractiveButton } from "../components";
 import {
-  NameUuidCell,
   NumberCell,
-  StatusFilter,
   StatusPill,
   StockCell,
 } from "../components/ui-reusable-small-components/table";
@@ -34,63 +32,6 @@ const useProductVariant = () => {
    * Hook states
    */
   const { generateProductOptions } = useProduct();
-  const productVariantInputs = [
-    {
-      name: "Product",
-      label: "Variant Product",
-      options: generateProductOptions,
-      component: "Select",
-      type: "text",
-      gap: true,
-    },
-    {
-      name: "name",
-      label: "Variant Name",
-      placeholder: "Name",
-      errorMessage: "Enter variant name",
-      component: "Input",
-      type: "text",
-    },
-    {
-      name: "cost",
-      label: "Variant Buying Price",
-      placeholder: "Cost",
-      errorMessage: "Enter variant buying price",
-      component: "Input",
-      type: "number",
-      gap: true,
-    },
-    {
-      name: "retail",
-      label: "Variant Selling Price",
-      placeholder: "Retail",
-      errorMessage: "Enter variant selling price",
-      component: "Input",
-      type: "number",
-    },
-    {
-      name: "initial_number_of_pieces",
-      label: "Variant Stock Quantity",
-      placeholder: "Number Of Pieces",
-      errorMessage: "Enter variant number of pieces",
-      component: "Input",
-      type: "number",
-      gap: true,
-    },
-    {
-      name: "measure",
-      label: "Variant Measure",
-      placeholder: "Measure",
-      errorMessage: "Enter variant measure",
-      component: "Input",
-      type: "number",
-    },
-    {
-      name: "vat",
-      component: "Switch",
-      type: "radio",
-    },
-  ];
   const [allProductVariantsFromDB, setAllProductVariantsFromDB] =
     useRecoilState(allProductVariantsFromDBState);
   const [allProductsFromDB, setAllProductsFromDB] = useRecoilState(
@@ -110,6 +51,61 @@ const useProductVariant = () => {
     isEditingProductVariantState
   );
 
+  const productVariantInputs = [
+    {
+      name: "Product",
+      label: "Variant Product",
+      options: generateProductOptions,
+      component: "Select",
+      type: "text",
+    },
+    {
+      name: "name",
+      label: "Variant Name",
+      placeholder: "Name",
+      errorMessage: "Enter variant name",
+      component: "Input",
+      type: "text",
+    },
+    {
+      name: "cost",
+      label: "Variant Buying Price",
+      placeholder: "Cost",
+      errorMessage: "Enter variant buying price",
+      component: "Input",
+      type: "number",
+    },
+    {
+      name: "retail",
+      label: "Variant Selling Price",
+      placeholder: "Retail",
+      errorMessage: "Enter variant selling price",
+      component: "Input",
+      type: "number",
+    },
+    {
+      name: "initial_number_of_pieces",
+      label: "Variant Stock Quantity",
+      placeholder: "Number Of Pieces",
+      errorMessage: "Enter variant number of pieces",
+      component: "Input",
+      type: "number",
+    },
+    {
+      name: "measure",
+      label: "Variant Measure",
+      placeholder: "Measure",
+      errorMessage: "Enter variant measure",
+      component: "Input",
+      type: "number",
+    },
+    {
+      name: "vat",
+      component: "Switch",
+      type: "radio",
+    },
+  ];
+
   const productVariantsTableColumns = useMemo(
     () => [
       {
@@ -118,15 +114,11 @@ const useProductVariant = () => {
           {
             Header: "Name",
             accessor: "name",
-            Cell: NameUuidCell,
-            uuidAccessor: "uuid",
           },
           {
             Header: "Status",
             accessor: "status",
             Cell: StatusPill,
-            Filter: StatusFilter,
-            filter: "include",
           },
           {
             Header: "Cost (BP)",
@@ -271,11 +263,11 @@ const useProductVariant = () => {
               : productFromDB
           )
         );
-
         Notification.successNotification(response.message);
       }
 
       setGlobalProduct(null),
+        setIsEditingProductVariant(false),
         setGlobalProductVariant(null),
         setShowCreateOrEditProductVariantModal(false);
     });
@@ -396,9 +388,9 @@ const useProductVariant = () => {
               <Icon
                 icon={
                   productVariant?.attributes?.vat ? (
-                    <BsCheck2All className="text-c_green w-5 h-5" />
+                    <BsCheck2Circle className="text-c_green w-4 h-4" />
                   ) : (
-                    <IoIosClose className="text-red-400 w-5 h-5" />
+                    <BsCheck2Circle className="text-red-400 w-4 h-4" />
                   )
                 }
               />
@@ -424,6 +416,15 @@ const useProductVariant = () => {
                       setIsEditingProductVariant(true),
                       setShowCreateOrEditProductVariantModal(true);
                   }}
+                />
+
+                <InteractiveButton
+                  title="Stock"
+                  buttonWrapperStyles={`text-center py-1 px-4 bg-c_yellow rounded-full text-white w-fit text-xs uppercase`}
+                  arrowsPosition="left"
+                  defaultIcon={<HiPlusSm />}
+                  hoverIcon={<HiArrowNarrowRight />}
+                  purpose={() => {}}
                 />
               </div>,
             ],

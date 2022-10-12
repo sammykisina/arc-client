@@ -19,7 +19,6 @@ const CreateOrEditTable = () => {
    */
   const [isEditingTable, setIsEditingTable] =
     useRecoilState(isEditingTableState);
-  const { handleSubmit } = useForm();
   const [selectedTableName, setSelectedTableName] = useState("");
   const [selectedNumberOfSeats, setSelectedNumberOfSeats] = useState("");
   const [selectedNumberOfExtendingSeats, setSelectedNumberOfExtendingSeats] =
@@ -169,7 +168,7 @@ const CreateOrEditTable = () => {
 
       {/* fields */}
       <div className="sm:flex justify-center items-center">
-        <form className={formStyles} onSubmit={handleSubmit(onSubmit)}>
+        <section className={formStyles}>
           {tableInputs.map((tableInput, tableInputIndex) => (
             <div
               key={tableInputIndex}
@@ -213,10 +212,10 @@ const CreateOrEditTable = () => {
               icon={<BsSave className="w-5 h-5 text-white" />}
               buttonStyles="flex items-center gap-x-2 px-4 py-2 bg-c_yellow rounded-xl text-white"
               buttonTitleWrapperStyles="hidden sm:block"
-              type="submit"
+              purpose={onSubmit}
             />
           </div>
-        </form>
+        </section>
       </div>
     </section>
   );

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { HiPlus } from "react-icons/hi";
 import { useSetRecoilState } from "recoil";
-import { showCreateOrEditTableModalState } from "../../atoms/ModalAtoms";
-import { Button, SpinnerLoader, Table } from "../";
-import { useTable } from "../../hooks";
+import { Button, SpinnerLoader, Table } from "../../../";
+import { showCreateOrEditTableModalState } from "../../../../atoms/ModalAtoms";
+import { useTable } from "../../../../hooks";
 
 const Tables = () => {
   // component states

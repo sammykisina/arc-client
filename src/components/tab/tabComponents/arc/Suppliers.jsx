@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SuppliersList, Tab } from "../";
+import { SuppliersList, Tab } from "../../../";
 
 const Suppliers = () => {
   const [index, setIndex] = useState(0);
