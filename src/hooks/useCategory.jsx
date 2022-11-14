@@ -1,7 +1,4 @@
-import { useState } from "react";
-import { useMemo } from "react";
-import { MdDelete } from "react-icons/md";
-import { RiEditCircleFill } from "react-icons/ri";
+import { useState, useMemo, useCallback } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { CategoryAPI } from "../api/categoryAPI";
 import {
@@ -12,9 +9,11 @@ import {
 import {
   showCreateOrEditCategoryModalState,
   showDeleteCategoryModalState,
-} from "../atoms/ModalAtoms";
-import { Icon } from "../components";
-import { NameUuidCell } from "../components/ui-reusable-small-components/table";
+} from "../atoms/ModalAtom";
+import {
+  DeleteAction,
+  EditAction,
+} from "../components/ui-reusable-small-components/table";
 import { Notification } from "../utils/notifications";
 
 const useCategory = () => {
@@ -38,15 +37,15 @@ const useCategory = () => {
   const categoryInputs = [
     {
       name: "name",
-      label: "Enter Category Name",
+      label: "Enter Name",
       errorMessage: "Enter category name",
       component: "Input",
       type: "text",
     },
     {
       name: "description",
-      label: "Enter Category Description",
-      errorMessage: "enter category description",
+      label: "Enter Description",
+      errorMessage: "Enter category description",
       component: "TextArea",
       type: "text",
     },
@@ -162,12 +161,12 @@ const useCategory = () => {
     return categoryEditData;
   };
 
-  const getAllCategoriesFromDB = () => {
+  const getAllCategoriesFromDB = useCallback(async () => {
     setIsFetchingCategories(true);
     CategoryAPI.getAll()
       .then((categories) => setAllCategoriesFromDB(categories))
       .finally(() => setIsFetchingCategories(false));
-  };
+  }, [allCategoriesFromDB]);
 
   const getCategoriesDataForCategoriesTable = () => {
     let categoriesData = [];
@@ -176,25 +175,23 @@ const useCategory = () => {
       categoriesData = [
         ...categoriesData,
         {
-          uuid: categoryFromDB?.attributes?.uuid,
           name: categoryFromDB?.attributes?.name,
           description: categoryFromDB?.attributes?.description,
           actions: [
             <div
-              className="flex gap-x-3"
+              className="flex gap-x-3 items-center"
               key={categoryFromDB?.attributes?.uuid}
             >
-              <Icon
-                icon={<MdDelete className="deleteActionButton" />}
-                purpose={() => {
-                  setGlobalCategory(categoryFromDB);
-                  setShowDeleteCategoryModal(true);
-                }}
-              />
-              <Icon
-                icon={<RiEditCircleFill className="editActionButton" />}
+              <DeleteAction
                 purpose={() => {
                   setGlobalCategory(categoryFromDB),
+                    setShowDeleteCategoryModal(true);
+                }}
+              />
+              <EditAction
+                purpose={() => {
+                  setGlobalCategory(categoryFromDB),
+                    setIsEditingCategory(true),
                     setShowCreateOrEditCategoryModal(true);
                 }}
               />

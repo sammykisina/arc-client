@@ -1,8 +1,7 @@
 import { useMemo, useState } from "react";
-import { BsCheck2All, BsCheck2Circle } from "react-icons/bs";
+import { BsCheck2Circle } from "react-icons/bs";
 import { HiArrowNarrowRight, HiChevronDown, HiPlusSm } from "react-icons/hi";
-import { IoIosArrowRoundForward, IoIosClose } from "react-icons/io";
-import { MdDelete, MdKeyboardArrowRight } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { RiEditCircleFill } from "react-icons/ri";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { ProductAPI } from "../api/productAPI";
@@ -10,16 +9,17 @@ import { createProductDecisionTabsIndexState } from "../atoms/AppAtoms";
 import {
   showCreateOrEditProductState,
   showDeleteProductModalState,
-} from "../atoms/ModalAtoms";
+} from "../atoms/ModalAtom";
 import {
   allProductsFromDBState,
   globalProductState,
   isEditingProductState,
 } from "../atoms/ProductAtom";
-import { Button, Icon, InteractiveButton } from "../components";
+import { Icon, InteractiveButton } from "../components";
 import {
   CategoryFilter,
-  NameUuidCell,
+  DeleteAction,
+  EditAction,
   NumberCell,
   StatusFilter,
   StatusPill,
@@ -53,85 +53,82 @@ const useProduct = () => {
   const dependentProductInputs = [
     {
       name: "name",
-      label: "Product Name",
-      errorMessage: "Enter name",
+      label: "Name",
+      errorMessage: "Enter product name",
       component: "Input",
       type: "text",
       required: true,
     },
     {
       name: "category",
-      label: "Product Category",
-      errorMessage: "Choose category",
+      label: "Category",
+      errorMessage: "Choose product category",
       options: generateCategoryOptions,
       component: "Select",
     },
   ];
 
   const independentProductInputs = [
-    {
-      name: "name",
-      label: "Product Name",
-      errorMessage: "Enter name.",
-      component: "Input",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "category",
-      label: "Product Category.",
-      errorMessage: "Choose category",
-      options: generateCategoryOptions,
-      component: "Select",
-      gap: true,
-    },
-    {
-      name: "cost",
-      label: "Product Buying Price",
-      errorMessage: "Enter buying price.",
-      component: "Input",
-      type: "number",
-      gap: true,
-      required: true,
-    },
-    {
-      name: "retail",
-      label: "Product Selling Price",
-      errorMessage: "Enter selling price.",
-      component: "Input",
-      type: "number",
-      required: true,
-    },
-    {
-      name: "initial_number_of_pieces",
-      label: "Product Stock Quantity",
-      errorMessage: "Enter number of pieces.",
-      component: "Input",
-      type: "number",
-      readonly:
-        globalProduct?.attributes?.inventory?.store !=
-        globalProduct?.attributes?.inventory?.stock
-          ? true
-          : false,
-      required:
-        globalProduct?.attributes?.inventory?.store ===
-        globalProduct?.attributes?.inventory?.stock
-          ? true
-          : false,
-    },
-    {
-      name: "measure",
-      label: "Product Measure",
-      errorMessage: "Enter measure.",
-      component: "Input",
-      type: "number",
-      required: true,
-    },
-    {
-      name: "vat",
-      component: "Switch",
-      type: "radio",
-    },
+    [
+      {
+        name: "name",
+        label: "Name",
+        errorMessage: "Enter product name.",
+        component: "Input",
+        type: "text",
+        required: true,
+      },
+      {
+        name: "category",
+        label: "Category",
+        options: generateCategoryOptions,
+        component: "Select",
+      },
+      {
+        name: "measure",
+        label: "Measure",
+        errorMessage: "Enter product measure.",
+        component: "Input",
+        type: "number",
+        required: true,
+      },
+      {
+        name: "initial_number_of_pieces",
+        label: "Stock Quantity",
+        errorMessage: "Enter number of pieces.",
+        component: "Input",
+        type: "number",
+        readonly:
+          globalProduct?.attributes?.inventory?.store !=
+          globalProduct?.attributes?.inventory?.stock
+            ? true
+            : false,
+        required:
+          globalProduct?.attributes?.inventory?.store ===
+          globalProduct?.attributes?.inventory?.stock
+            ? true
+            : false,
+      },
+    ],
+    [
+      {
+        name: "cost",
+        label: "Buying Price",
+        errorMessage: "Enter product buying price.",
+        component: "Input",
+        type: "number",
+        gap: true,
+        required: true,
+      },
+      {
+        name: "retail",
+        label: "Selling Price",
+        errorMessage: "Enter product selling price.",
+        component: "Input",
+        type: "number",
+        required: true,
+      },
+    ],
   ];
 
   const productsTableColumns = useMemo(
@@ -473,15 +470,14 @@ const useProduct = () => {
               className="flex gap-x-3 items-center"
               key={productFromDB?.attributes?.uuid}
             >
-              <Icon
-                icon={<MdDelete className="deleteActionButton " />}
+              <DeleteAction
                 purpose={() => {
-                  setGlobalProduct(productFromDB);
-                  setShowDeleteProductModal(true);
+                  setGlobalProduct(productFromDB),
+                    setShowDeleteProductModal(true);
                 }}
               />
-              <Icon
-                icon={<RiEditCircleFill className="editActionButton" />}
+
+              <EditAction
                 purpose={() => {
                   setGlobalProduct(productFromDB),
                     setIsEditingProduct(true),

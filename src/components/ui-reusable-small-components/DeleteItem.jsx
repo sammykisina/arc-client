@@ -1,16 +1,16 @@
 import React from "react";
+import { FiTrash } from "react-icons/fi";
 import { MdCancel, MdDelete } from "react-icons/md";
-import { Title, Button } from "../";
+import { Title, Button, ModalClose } from "../";
 
-const DeleteItem = ({ title, name, itemDelete, cancelDelete }) => {
+const DeleteItem = ({ title, name, itemDelete, close }) => {
   return (
-    <section>
-      {/* title */}
-      <Title title={title} />
+    <section className="px-4">
+      <ModalClose close={close} />
 
       {/* confirmation */}
       <div className="flex justify-center mt-4 text-c_dark">
-        <p className="border border-c_gray/20 w-fit px-3 py-1 rounded-md flex flex-col gap-y-3">
+        <p className="border border-c_gray/20 text-sm w-fit px-3 py-1 rounded-md flex flex-col gap-y-3">
           {`Are you sure you want to delete the ${name}?`}
 
           <span className="font-semibold text-red-500 text-sm">
@@ -23,16 +23,9 @@ const DeleteItem = ({ title, name, itemDelete, cancelDelete }) => {
       <div className="mt-10 flex justify-end gap-x-4">
         <Button
           title="Delete"
-          icon={<MdDelete className="w-5 h-5 text-white" />}
-          buttonStyles="flex items-center gap-x-2 px-4 py-2 bg-red-500 rounded-xl text-white disabled:bg-c_yellow/10"
+          icon={<FiTrash className="w-5 h-5" />}
+          buttonStyles="delete_primary_button"
           purpose={itemDelete}
-        />
-
-        <Button
-          title="Cancel"
-          icon={<MdCancel className="w-5 h-5 text-white" />}
-          buttonStyles="flex items-center gap-x-2 px-4 py-2 bg-c_yellow rounded-xl text-white disabled:bg-c_yellow/10"
-          purpose={cancelDelete}
         />
       </div>
     </section>

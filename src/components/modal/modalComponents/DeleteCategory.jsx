@@ -1,7 +1,7 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { DeleteItem } from "../../";
 import { globalCategoryState } from "../../../atoms/CategoryAtom";
-import { showDeleteCategoryModalState } from "../../../atoms/ModalAtoms";
+import { showDeleteCategoryModalState } from "../../../atoms/ModalAtom";
 import { useCategory } from "../../../hooks";
 
 const DeleteCategory = () => {
@@ -18,14 +18,14 @@ const DeleteCategory = () => {
   return (
     <section>
       <DeleteItem
-        name={`Category ${globalCategory?.attributes?.name}`}
-        cancelDelete={() => {
-          setShowDeleteCategoryModal(false), setGlobalCategory(null);
-        }}
+        name={`Category : ${globalCategory?.attributes?.name}`}
         itemDelete={() => {
           deleteCategory(),
-            setGlobalCategory(null),
-            setShowDeleteCategoryModal(false);
+            setShowDeleteCategoryModal(false),
+            setGlobalCategory(null);
+        }}
+        close={() => {
+          setShowDeleteCategoryModal(false), setGlobalCategory(null);
         }}
       />
     </section>

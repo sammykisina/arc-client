@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LocalStorage } from "../../utils/localStorage";
+import { Notification } from "../../utils/notifications";
 
 export const api = axios.create({
   withCredentials: true,
@@ -18,6 +18,7 @@ const errorHandler = (error) => {
 
   // logging only errors that are not 401
   if (statusCode && statusCode !== 401) {
+    Notification.errorNotification(error.response.data.message);
     console.log(error);
   }
 

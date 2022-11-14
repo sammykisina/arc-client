@@ -11,13 +11,16 @@ import {
 import {
   showCreateOrEditEmployeeModalState,
   showDeleteEmployeeModalState,
-} from "../atoms/ModalAtoms";
+} from "../atoms/ModalAtom";
 import { Icon } from "../components";
 import {
   AvatarCell,
+  DeleteAction,
+  EditAction,
   RoleFilter,
   StatusPill,
 } from "../components/ui-reusable-small-components/table";
+import { employeeRoles } from "../constants";
 import { Notification } from "../utils/notifications";
 
 const useEmployee = () => {
@@ -37,62 +40,63 @@ const useEmployee = () => {
   const setShowDeleteEmployeeModal = useSetRecoilState(
     showDeleteEmployeeModalState
   );
+  const [selectedRole, setSelectedRole] = useState("");
 
   const employeeInputs = [
-    {
-      name: "first_name",
-      label: "Employee First Name",
-      required: true,
-      errorMessage: "Enter employee first name",
-      component: "Input",
-      type: "text",
-    },
-    {
-      name: "last_name",
-      label: "Employee Last Name",
-      required: true,
-      errorMessage: "Enter employee last name",
-      component: "Input",
-      type: "text",
-    },
-    {
-      name: "employee_id",
-      label: "Employee Work ID",
-      required: true,
-      errorMessage: "Enter employee work id",
-      component: "Input",
-      type: "text",
-      gap: true,
-    },
-    {
-      name: "password",
-      label: "Employee Login Password",
-      required: true,
-      errorMessage: "Enter employee password",
-      component: "Input",
-      type: "password",
-    },
-    {
-      required: true,
-      label: "Employee Role",
-      component: "Select",
-      errorMessage: "Choose employee role",
-      options: [
-        { name: "Administrator", value: "admin" },
-        { name: "Bartender", value: "bartender" },
-        { name: "Waiter", value: "waiter" },
-        { name: "All", value: "*" },
-      ],
-    },
-    {
-      name: "email",
-      label: "Employee Email",
-      required: true,
-      errorMessage: "Enter employee email",
-      component: "Input",
-      type: "email",
-      gap: true,
-    },
+    [
+      {
+        name: "first_name",
+        label: "First Name",
+        required: true,
+        errorMessage: "Enter employee first name",
+        component: "Input",
+        type: "text",
+      },
+      {
+        name: "last_name",
+        label: "Last Name",
+        required: true,
+        errorMessage: "Enter employee last name",
+        component: "Input",
+        type: "text",
+      },
+      {
+        name: "email",
+        label: "Email",
+        required: true,
+        errorMessage: "Enter employee email",
+        component: "Input",
+        type: "email",
+        gap: true,
+      },
+      {
+        name: "password",
+        label: "Login Password",
+        required: true,
+        errorMessage: "Enter employee password",
+        component: "Input",
+        type: "password",
+      },
+    ],
+    [
+      {
+        label: "Employee Role",
+        component: "Select",
+        selected: selectedRole,
+        setSelected: setSelectedRole,
+        errorMessage: "Choose employee role",
+        options: employeeRoles,
+      },
+      {
+        name: "employee_id",
+        label: "Work ID",
+        required: true,
+        errorMessage: "Enter employee work id",
+        component: "Input",
+        type: "text",
+        gap: true,
+      },
+    ],
   ];
 
   const employeesTableColumns = useMemo(
@@ -258,8 +262,7 @@ const useEmployee = () => {
           role: employee?.relationships?.role?.attributes?.name,
           actions: [
             <div className="flex gap-x-3" key={employee?.attributes?.uuid}>
-              <Icon
-                icon={<MdDelete className="deleteActionButton " />}
+              <DeleteAction
                 purpose={() => {
                   if (
                     employee?.relationships?.role?.attributes?.slug ===
@@ -275,8 +278,8 @@ const useEmployee = () => {
                   setShowDeleteEmployeeModal(true);
                 }}
               />
-              <Icon
-                icon={<RiEditCircleFill className="editActionButton" />}
+
+              <EditAction
                 purpose={() => {
                   if (
                     employee.relationships.role?.attributes?.slug ===
@@ -363,6 +366,8 @@ const useEmployee = () => {
     isFetchingEmployees,
     getAllEmployeeFromDB,
     deleteEmployee,
+    selectedRole,
+    setSelectedRole,
   };
 };
 

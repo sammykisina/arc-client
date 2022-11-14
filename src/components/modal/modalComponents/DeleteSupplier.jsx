@@ -1,9 +1,9 @@
 import React from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { DeleteItem } from "../../";
-import { showDeleteSupplierModalState } from "../../../atoms/ModalAtoms";
-import { globalSupplierState } from "../../../atoms/SuppliersListAtom";
-import useSuppliersList from "../../../hooks/useSuppliersList";
+import { showDeleteSupplierModalState } from "../../../atoms/ModalAtom";
+import { globalSupplierState } from "../../../atoms/SupplierAtom";
+import useSuppliersList from "../../../hooks/useSupplier";
 
 const DeleteSupplier = () => {
   /**
@@ -18,7 +18,7 @@ const DeleteSupplier = () => {
 
   return (
     <DeleteItem
-      name={`Supplier ${globalSupplier?.attributes?.name}`}
+      name={`Supplier : ${globalSupplier?.attributes?.name}`}
       cancelDelete={() => {
         setGlobalSupplier(null), setShowDeleteSupplierModal(false);
       }}
@@ -26,6 +26,9 @@ const DeleteSupplier = () => {
         deleteSupplier(),
           setGlobalSupplier(null),
           setShowDeleteSupplierModal(false);
+      }}
+      close={() => {
+        setGlobalSupplier(null), setShowDeleteSupplierModal(false);
       }}
     />
   );

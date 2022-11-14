@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
-import useSuppliersList from "../../../hooks/useSuppliersList";
-import { Button, Line, Select, Title } from "../../";
+import { useEffect } from "react";
+import useSuppliersList from "../../../hooks/useSupplier";
+import { Button, Line, ModalClose, ModalHeader, Select, Title } from "../../";
 import { useForm } from "react-hook-form";
 import { BsSave } from "react-icons/bs";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   globalSupplierState,
   isEditingSupplierState,
-} from "../../../atoms/SuppliersListAtom";
+} from "../../../atoms/SupplierAtom";
 import { Notification } from "../../../utils/notifications";
-import { showCreateOrEditSupplierModalState } from "../../../atoms/ModalAtoms";
+import { showCreateOrEditSupplierModalState } from "../../../atoms/ModalAtom";
+import { checkIfExitsInArray } from "../../../utils/app";
 
 const CreateOrEditSupplier = () => {
   /**
@@ -18,7 +19,7 @@ const CreateOrEditSupplier = () => {
   const {
     supplierInputs,
     createSupplier,
-    getCurrentlyAssignedSupplierNames,
+    getCurrentlyCreatedSuppliers,
     getSupplierEditData,
     updateSupplier,
     selectedStatus,
@@ -60,7 +61,7 @@ const CreateOrEditSupplier = () => {
     // validate if the entered name has been taken
     if (
       !isEditingSupplier &&
-      getCurrentlyAssignedSupplierNames().includes(name)
+      checkIfExitsInArray(getCurrentlyCreatedSuppliers(), name)
     ) {
       Notification.errorNotification("The suppler name has been taken.");
       return;
@@ -126,29 +127,38 @@ const CreateOrEditSupplier = () => {
   }, [globalSupplier]);
 
   return (
-    <section className="relative h-[320px] sm:h-[200px]">
-      <div className="pb-2">
-        <Title
-          title={isEditingSupplier ? "Edit Supplier." : "Create  Supplier."}
-        />
-        <Line lineStyles="bg-c_yellow/100 w-[25px] h-[5px] rounded-full" />
-      </div>
+    <section className="space-y-5">
+      {/* Header */}
+      <ModalHeader
+        close={() => {
+          setGlobalSupplier(null),
+            setIsEditingSupplier(false),
+            setShowCreateOrEditSupplierModal(false);
+        }}
+        isEditing={isEditingSupplier}
+        editTitle="Editing Supplier"
+        createTitle="Creating A Supplier"
+      />
 
+      {/* Body */}
       <form
-        className="h-[400px] sm:h-[270px]  overflow-auto sm:items-center pt-5 pb-10 px-1 flex flex-col gap-5 sm:grid grid-cols-2"
         onSubmit={handleSubmit(onSubmit)}
+        className="duration-300 space-y-2 sm:space-y-0 relative sm:grid grid-cols-5 gap-x-2 px-4"
       >
-        {supplierInputs.map((supplierInput, supplierInputIndex) => (
-          <div key={supplierInputIndex}>
-            {supplierInput.component === "Input" ? (
-              <div className={`input-group`}>
+        {/* info section */}
+        <section className="space-y-4 col-span-3">
+          <Title title="General Info" />
+
+          <div className="space-y-3">
+            {supplierInputs[0].map((supplierInput, supplierInputIndex) => (
+              <div className={`input-group`} key={supplierInputIndex}>
                 <input
                   type={supplierInput.type}
                   placeholder=""
                   {...register(supplierInput.name, {
                     required: supplierInput.required,
                   })}
-                  className="input mt-1"
+                  className="input"
                 />
 
                 <label className="placeholder border">
@@ -159,8 +169,20 @@ const CreateOrEditSupplier = () => {
                   <span className="error">{supplierInput.errorMessage}</span>
                 )}
               </div>
-            ) : (
+            ))}
+          </div>
+        </section>
+
+        {/* Supply Items And Status Section */}
+        <section className="space-y-5 col-span-2 py-2 sm:py-0 sm:px-2 border-t sm:border-t-0 border-l border-c_yellow">
+          <Title
+            title={`${isEditingSupplier ? "Status" : "Supply Item and Status"}`}
+          />
+
+          <div className="space-y-5">
+            {supplierInputs[1].map((supplierInput, supplierInputIndex) => (
               <Select
+                key={supplierInputIndex}
                 title=""
                 options={supplierInput.options}
                 selectWrapperStyles={`w-full rounded-md ring-c_gray  py-2 px-2 ${
@@ -173,16 +195,16 @@ const CreateOrEditSupplier = () => {
                 selectLabelStyles="border text-base text-c_dark/50 rounded-full px-1"
                 multiple={supplierInput.multiple}
               />
-            )}
+            ))}
           </div>
-        ))}
+        </section>
 
-        <div className="absolute -bottom-[100px] sm:-bottom-[120px] right-0">
+        {/* submit button */}
+        <div className="absolute -top-[20px] sm:top-[230px] flex justify-end w-full px-8">
           <Button
             title="Save"
-            icon={<BsSave className="w-5 h-5 text-white" />}
-            buttonStyles="flex items-center gap-x-2 px-4 py-2 bg-c_yellow rounded-xl text-white"
-            buttonTitleWrapperStyles="hidden sm:block"
+            icon={<BsSave className="w-5 h-5" />}
+            buttonStyles=" flex items-center gap-x-2 px-4 py-2 bg-c_yellow rounded-xl text-white hover:text-c_dark"
             type="submit"
           />
         </div>

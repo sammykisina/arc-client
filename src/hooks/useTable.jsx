@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { BsCheck2All } from "react-icons/bs";
+import { BsCheck2All, BsCheck2Circle } from "react-icons/bs";
 import { IoIosClose } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { RiEditCircleFill } from "react-icons/ri";
@@ -8,7 +8,7 @@ import { TableAPI } from "../api/tableApi";
 import {
   showCreateOrEditTableModalState,
   showDeleteTableModalState,
-} from "../atoms/ModalAtoms";
+} from "../atoms/ModalAtom";
 import {
   allTablesFromDBState,
   globalTableState,
@@ -16,7 +16,8 @@ import {
 } from "../atoms/TableAtom";
 import { Icon } from "../components";
 import {
-  NameUuidCell,
+  DeleteAction,
+  EditAction,
   NumberCell,
 } from "../components/ui-reusable-small-components/table";
 import { Notification } from "../utils/notifications";
@@ -73,8 +74,6 @@ const useTable = () => {
           {
             Header: "Name",
             accessor: "name",
-            Cell: NameUuidCell,
-            uuidAccessor: "uuid",
           },
           {
             Header: "Number",
@@ -243,9 +242,9 @@ const useTable = () => {
             <Icon
               icon={
                 table?.attributes?.extendable ? (
-                  <BsCheck2All className="text-c_green w-5 h-5" />
+                  <BsCheck2Circle className="text-c_green w-4 h-4" />
                 ) : (
-                  <IoIosClose className="text-red-400 w-5 h-5" />
+                  <BsCheck2Circle className="text-red-400 w-4 h-4" />
                 )
               }
             />
@@ -253,15 +252,13 @@ const useTable = () => {
           extending_seats: table?.attributes?.number_of_extending_seats,
           actions: [
             <div className="flex gap-x-3" key={table?.attributes?.uuid}>
-              <Icon
-                icon={<MdDelete className="deleteActionButton" />}
+              <DeleteAction
                 purpose={() => {
                   setGlobalTable(table);
                   setShowDeleteTableModal(true);
                 }}
               />
-              <Icon
-                icon={<RiEditCircleFill className="editActionButton" />}
+              <EditAction
                 purpose={() => {
                   setGlobalTable(table);
                   setIsEditingTable(true);

@@ -1,12 +1,12 @@
 import { useCallback } from "react";
-import useSuppliersList from "../../../../hooks/useSuppliersList";
-import { Button, SpinnerLoader, Table } from "../../../";
+import useSuppliersList from "../../../../hooks/useSupplier";
+import { Button, SpinnerLoader, Table } from "../../..";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isSidebarOpenState } from "../../../../atoms/AppAtoms";
-import { HiPlus } from "react-icons/hi";
-import { showCreateOrEditSupplierModalState } from "../../../../atoms/ModalAtoms";
+import { HiPlusSm } from "react-icons/hi";
+import { showCreateOrEditSupplierModalState } from "../../../../atoms/ModalAtom";
 
-const SuppliersList = () => {
+const Suppliers = () => {
   /**
    * Component states
    */
@@ -66,7 +66,7 @@ const SuppliersList = () => {
   }, []);
 
   return (
-    <section className="h-[440px] sm:h-[518px] lg:h-[565px]">
+    <section className="relative h-[440px] sm:h-[518px]  lg:h-[565px]">
       <div className="mt-2 w-full">
         {isFetchingSuppliers ? (
           <div className="mt-24">
@@ -87,12 +87,12 @@ const SuppliersList = () => {
         )}
       </div>
 
-      <div className="flex justify-end  absolute top-[100px] md:top-0 xl:top-[50px] right-0 w-fit">
+      <div className="flex justify-end  absolute top-0 right-0 w-fit">
         <Button
           title="Supplier"
-          icon={<HiPlus className="w-5 h-5 text-c_white" />}
-          buttonStyles="primaryButton"
-          buttonTitleWrapperStyles="hidden sm:block"
+          icon={<HiPlusSm className="w-5 h-5 text-c_white" />}
+          buttonStyles="primary_button"
+          buttonTitleWrapperStyles="block md:hidden lg:block"
           purpose={() => {
             setShowCreateOrEditSupplierModal(true);
           }}
@@ -102,4 +102,4 @@ const SuppliersList = () => {
   );
 };
 
-export default SuppliersList;
+export default Suppliers;

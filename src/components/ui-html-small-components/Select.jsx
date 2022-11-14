@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { HiX } from "react-icons/hi";
 import { Icon, Button } from "..";
+import { checkIfExitsInArray } from "../../utils/app";
 
 const Select = ({
   selected,
@@ -50,16 +51,13 @@ const Select = ({
 
   const getClasses = (option) => {
     let bgColor = "";
-    if (multiple) {
-      selected?.find((selectedElement) => {
-        if (
-          selectedElement?.name.toLowerCase() === option?.name.toLowerCase()
-        ) {
-          bgColor = "bg-c_yellow/60 w-fit";
-        }
-      });
+    if (Array.isArray(selected)) {
+      checkIfExitsInArray(selected, option?.name) &&
+        (bgColor = "bg-c_yellow/60 w-fit");
+    } else {
+      option?.name.toLowerCase() === selected?.name?.toLowerCase() &&
+        (bgColor = "bg-c_yellow/60 w-fit");
     }
-
     return bgColor;
   };
 
@@ -140,7 +138,9 @@ const Select = ({
       </ul>
 
       {/* label */}
-      <label className={`absolute -top-[15px] bg-white  ${selectLabelStyles}`}>
+      <label
+        className={`absolute text-sm -top-[15px] bg-white  ${selectLabelStyles}`}
+      >
         {selectLabel}
       </label>
     </section>

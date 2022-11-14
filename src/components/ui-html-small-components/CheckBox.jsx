@@ -2,7 +2,8 @@
 import React from "react";
 
 // icon imports {react icons}
-import { BiCheckbox, BiCheckboxChecked } from "react-icons/bi";
+import { BiCheckbox, BiCheckboxChecked, BiCircle } from "react-icons/bi";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 // recoil imports {recoil and atoms}
 
@@ -28,9 +29,11 @@ const CheckBox = ({
         iconWrapperStyles={checkIconsWrapper}
         icon={
           isChecked ? (
-            <BiCheckboxChecked className={`w-8 h-8 ${checkIconStyles}`} />
+            <IoMdCheckmarkCircleOutline
+              className={`w-5 h-5 ${checkIconStyles}`}
+            />
           ) : (
-            <BiCheckbox className={`w-8 h-8 ${checkIconStyles}`} />
+            <BiCircle className={`w-5 h-5 ${checkIconStyles}`} />
           )
         }
         purpose={() =>

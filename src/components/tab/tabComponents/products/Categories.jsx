@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useEffect } from "react";
 import { HiPlusSm } from "react-icons/hi";
 import { Button, SpinnerLoader, Table } from "../../../";
-import { useSetRecoilState } from "recoil";
-import { showCreateOrEditCategoryModalState } from "../../../../atoms/ModalAtoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { showCreateOrEditCategoryModalState } from "../../../../atoms/ModalAtom";
 import { useCategory } from "../../../../hooks";
+import { allCategoriesFromDBState } from "../../../../atoms/CategoryAtom";
 
 const Categories = () => {
   /**
@@ -16,9 +17,12 @@ const Categories = () => {
     isFetchingCategories,
     getCategoriesDataForCategoriesTable,
   } = useCategory();
+  const allCategoriesFromDB = useRecoilValue(allCategoriesFromDBState);
   const setShowCreateOrEditCategoryModal = useSetRecoilState(
     showCreateOrEditCategoryModalState
   );
+
+  console.log("allCategoriesFromDB", allCategoriesFromDB);
 
   /**
    * Component Functions
@@ -28,7 +32,7 @@ const Categories = () => {
   }, []);
 
   return (
-    <section className="h-[440px] sm:h-[520px] lg:h-[565px]  relative">
+    <section className="h-[440px] border border-transparent sm:h-[520px] lg:h-[565px]  relative">
       <div className="mt-2 w-full border border-transparent">
         {isFetchingCategories ? (
           <div className="mt-24 ">
@@ -44,11 +48,11 @@ const Categories = () => {
         )}
       </div>
 
-      <div className="flex justify-end absolute top-[6px] right-0 w-fit">
+      <div className="absolute top-[5px] right-0 w-fit">
         <Button
           title="Category"
           icon={<HiPlusSm className="w-5 h-5 text-c_white" />}
-          buttonStyles="primaryButton"
+          buttonStyles="primary_button"
           buttonTitleWrapperStyles="hidden sm:block"
           purpose={() => {
             setShowCreateOrEditCategoryModal(true);

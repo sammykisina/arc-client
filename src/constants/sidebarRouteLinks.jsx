@@ -8,49 +8,50 @@ import { MdOutlineImportContacts } from "react-icons/md";
 import { RiSettingsLine, RiSettings2Line } from "react-icons/ri";
 import { GiRoundBottomFlask } from "react-icons/gi";
 import { FiHexagon } from "react-icons/fi";
+import { ROUTE_PATHS } from "../constants";
 
 export const sidebarRouteLinks = [
   {
     title: "Dashboard",
-    route: "/",
+    route: ROUTE_PATHS.DASHBOARD,
     icon: <BsGrid className="icon" />,
     owner: "admin_super-admin_bartender",
   },
   {
     title: "Bills",
-    route: "/bills",
+    route: ROUTE_PATHS.BILLS,
     icon: <BsClipboardData className="icon" />,
     owner: "admin_super-admin",
   },
   {
     title: "ARC",
-    route: "/arc",
+    route: ROUTE_PATHS.ARC,
     icon: <MdOutlineImportContacts className="icon" />,
     owner: "admin_super-admin",
     gap: true,
   },
   {
     title: "Counter",
-    route: "/counter",
+    route: ROUTE_PATHS.COUNTER,
     icon: <FiHexagon className="icon" />,
     owner: "admin_super-admin_bartender",
   },
 
   {
-    title: "Employees",
-    route: "/employee",
+    title: "Work Force",
+    route: ROUTE_PATHS.WORKFORCE,
     icon: <BsPeople className="icon" />,
     owner: "admin_super-admin",
   },
   {
     title: "Storage",
-    route: "/storage",
+    route: ROUTE_PATHS.STORAGE,
     icon: <RiSettingsLine className="icon" />,
     owner: "admin_super-admin",
   },
   {
-    title: "Message",
-    route: "/message",
+    title: "Messenger",
+    route: ROUTE_PATHS.MESSENGER,
     icon: <BsChatSquare className="icon" />,
     owner: "admin_super-admin_bartender",
     gap: true,

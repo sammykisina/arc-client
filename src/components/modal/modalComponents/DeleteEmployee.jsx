@@ -1,6 +1,6 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { globalEmployeeState } from "../../../atoms/EmployeeAtom";
-import { showDeleteEmployeeModalState } from "../../../atoms/ModalAtoms";
+import { showDeleteEmployeeModalState } from "../../../atoms/ModalAtom";
 import { useEmployee } from "../../../hooks";
 import { DeleteItem } from "../../";
 
@@ -18,15 +18,15 @@ const DeleteEmployee = () => {
   return (
     <section>
       <DeleteItem
-        name={`Employee ${globalEmployee?.attributes?.first_name}  ${globalEmployee?.attributes?.last_name}`}
-        cancelDelete={() => {
-          setShowDeleteEmployeeModal(false), setGlobalEmployee(null);
-        }}
+        name={`Employee : ${globalEmployee?.attributes?.first_name}  ${globalEmployee?.attributes?.last_name}`}
         itemDelete={() => {
           deleteEmployee(),
             setGlobalEmployee(null),
             setShowDeleteEmployeeModal(false);
         }}
+        close={() => (
+          setGlobalEmployee(null), setShowDeleteEmployeeModal(false)
+        )}
       />
     </section>
   );

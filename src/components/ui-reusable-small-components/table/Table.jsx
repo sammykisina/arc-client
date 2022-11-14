@@ -55,7 +55,7 @@ const Table = ({
     <section>
       {showFilters && (
         <section
-          className={`flex gap-3 flex-col justify-start px-2 ${
+          className={`flex gap-3 flex-col justify-start  px-2 ${
             isSidebarOpen ? "md:flex-row lg:flex-row" : "md:flex-row"
           }`}
         >
@@ -68,9 +68,9 @@ const Table = ({
 
           {/* the filter by role section */}
           <div
-            className={`flex flex-col  gap-1 w-fit items-center ${
+            className={`flex flex-col  gap-1 w-fit items-center duration-300 lg:flex-row ${
               isSidebarOpen
-                ? "sm:flex-col lg:flex-row"
+                ? `${headerGroups.length >= 2 ? "sm:flex-col" : "sm:flex-row "}`
                 : "sm:flex-row md:flex-row"
             }`}
           >
@@ -101,8 +101,6 @@ const Table = ({
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
-                    // Add the sorting props to control sorting. For this example
-                    // we can add them into the header props
                     <th
                       scope="col"
                       className="group px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"

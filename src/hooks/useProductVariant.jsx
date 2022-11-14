@@ -8,7 +8,7 @@ import { ProductVariantAPI } from "../api/productVariantAPI";
 import {
   showCreateOrEditProductVariantModalState,
   showDeleteProductVariantModalState,
-} from "../atoms/ModalAtoms";
+} from "../atoms/ModalAtom";
 import {
   allProductsFromDBState,
   globalProductState,
@@ -20,6 +20,8 @@ import {
 } from "../atoms/VariantAtom";
 import { Icon, InteractiveButton } from "../components";
 import {
+  DeleteAction,
+  EditAction,
   NumberCell,
   StatusPill,
   StockCell,
@@ -52,58 +54,59 @@ const useProductVariant = () => {
   );
 
   const productVariantInputs = [
-    {
-      name: "Product",
-      label: "Variant Product",
-      options: generateProductOptions,
-      component: "Select",
-      type: "text",
-    },
-    {
-      name: "name",
-      label: "Variant Name",
-      placeholder: "Name",
-      errorMessage: "Enter variant name",
-      component: "Input",
-      type: "text",
-    },
-    {
-      name: "cost",
-      label: "Variant Buying Price",
-      placeholder: "Cost",
-      errorMessage: "Enter variant buying price",
-      component: "Input",
-      type: "number",
-    },
-    {
-      name: "retail",
-      label: "Variant Selling Price",
-      placeholder: "Retail",
-      errorMessage: "Enter variant selling price",
-      component: "Input",
-      type: "number",
-    },
-    {
-      name: "initial_number_of_pieces",
-      label: "Variant Stock Quantity",
-      placeholder: "Number Of Pieces",
-      errorMessage: "Enter variant number of pieces",
-      component: "Input",
-      type: "number",
-    },
-    {
-      name: "measure",
-      label: "Variant Measure",
-      placeholder: "Measure",
-      errorMessage: "Enter variant measure",
-      component: "Input",
-      type: "number",
-    },
-    {
-      name: "vat",
-      component: "Switch",
-      type: "radio",
-    },
+    [
+      {
+        name: "Product",
+        label: "Product",
+        options: generateProductOptions,
+        component: "Select",
+      },
+      {
+        name: "name",
+        label: "Name",
+        errorMessage: "Enter variant name",
+        component: "Input",
+        type: "text",
+      },
+      {
+        name: "measure",
+        label: "Measure",
+        placeholder: "Measure",
+        errorMessage: "Enter variant measure",
+        component: "Input",
+        type: "number",
+      },
+      {
+        name: "initial_number_of_pieces",
+        label: "Stock Quantity",
+        errorMessage: "Enter variant number of pieces",
+        component: "Input",
+        type: "number",
+      },
+      {
+        name: "VAT",
+        label: "VAT",
+        component: "CheckBox",
+      },
+    ],
+    [
+      {
+        name: "cost",
+        label: "Variant Buying Price",
+        placeholder: "Cost",
+        errorMessage: "Enter variant buying price",
+        component: "Input",
+        type: "number",
+      },
+      {
+        name: "retail",
+        label: "Variant Selling Price",
+        placeholder: "Retail",
+        errorMessage: "Enter variant selling price",
+        component: "Input",
+        type: "number",
+      },
+    ],
   ];
 
   const productVariantsTableColumns = useMemo(
@@ -208,6 +211,7 @@ const useProductVariant = () => {
         );
 
         setAllProductsFromDB(newProducts);
+        Notification.successNotification(response.message);
       }
     });
   };
@@ -397,19 +401,17 @@ const useProductVariant = () => {
             ),
             actions: [
               <div
-                className="flex gap-x-3"
+                className="flex gap-x-3 items-center"
                 key={productVariant?.attributes?.uuid}
               >
-                <Icon
-                  icon={<MdDelete className="deleteActionButton" />}
+                <DeleteAction
                   purpose={() => {
                     setGlobalProductVariant(productVariant),
                       setGlobalProduct(product),
                       setShowDeleteProductVariant(true);
                   }}
                 />
-                <Icon
-                  icon={<RiEditCircleFill className="editActionButton" />}
+                <EditAction
                   purpose={() => {
                     setGlobalProductVariant(productVariant),
                       setGlobalProduct(product),
@@ -417,7 +419,6 @@ const useProductVariant = () => {
                       setShowCreateOrEditProductVariantModal(true);
                   }}
                 />
-
                 <InteractiveButton
                   title="Stock"
                   buttonWrapperStyles={`text-center py-1 px-4 bg-c_yellow rounded-full text-white w-fit text-xs uppercase`}

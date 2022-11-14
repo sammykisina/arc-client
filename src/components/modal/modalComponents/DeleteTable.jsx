@@ -1,6 +1,6 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { DeleteItem } from "../../";
-import { showDeleteTableModalState } from "../../../atoms/ModalAtoms";
+import { showDeleteTableModalState } from "../../../atoms/ModalAtom";
 import { globalTableState } from "../../../atoms/TableAtom";
 import { useTable } from "../../../hooks";
 
@@ -13,12 +13,12 @@ const DeleteTable = () => {
   return (
     <section>
       <DeleteItem
-        name={`Table ${globalTable?.attributes?.name}`}
-        cancelDelete={() => {
-          setGlobalTable(null), setShowDeleteTableModal(false);
-        }}
+        name={`Table : ${globalTable?.attributes?.name}`}
         itemDelete={() => {
           deleteTable(), setGlobalTable(null), setShowDeleteTableModal(false);
+        }}
+        close={() => {
+          setGlobalTable(null), setShowDeleteTableModal(false);
         }}
       />
     </section>

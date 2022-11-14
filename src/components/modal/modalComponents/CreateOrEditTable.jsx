@@ -4,14 +4,12 @@ import {
   globalTableState,
   isEditingTableState,
 } from "../../../atoms/TableAtom";
-import { Button, CheckBox, Line, Select, Title } from "../../";
-import { useForm } from "react-hook-form";
-import ctr from "@netlify/classnames-template-literals";
+import { Button, CheckBox, Line, ModalHeader, Select, Title } from "../../";
 import { useState } from "react";
-import { BsSave } from "react-icons/bs";
 import { useTable } from "../../../hooks";
 import { Notification } from "../../../utils/notifications";
-import { showCreateOrEditTableModalState } from "../../../atoms/ModalAtoms";
+import { showCreateOrEditTableModalState } from "../../../atoms/ModalAtom";
+import { BsSave } from "react-icons/bs";
 
 const CreateOrEditTable = () => {
   /**
@@ -38,42 +36,45 @@ const CreateOrEditTable = () => {
   } = useTable();
 
   const tableInputs = [
-    {
-      name: "name",
-      label: "Select Name",
-      options: tableNameOptions,
-      errorMessage: "Select name",
-      component: "Select",
-      type: "select",
-      selected: selectedTableName,
-      setSelected: setSelectedTableName,
-    },
-    {
-      name: "number_of_seats",
-      label: "Select Number of Seats",
-      options: numberOfSeatsOptions,
-      errorMessage: "Select number of seats",
-      component: "Select",
-      type: "select",
-      selected: selectedNumberOfSeats,
-      setSelected: setSelectedNumberOfSeats,
-    },
-    {
-      component: "Switch",
-      type: "radio",
-      label: "Extendable?",
-    },
-    {
-      name: "number_of_extending_seats",
-      label: "Select Extending Seats",
-      options: numberOfSeatsOptions,
-      errorMessage: "Select number of extending seats",
-      component: "Select",
-      type: "select",
-      selected: selectedNumberOfExtendingSeats,
-      setSelected: setSelectedNumberOfExtendingSeats,
-      extraStyles: extendable ? "block" : "hidden",
-    },
+    [
+      {
+        name: "name",
+        label: "Select Name",
+        options: tableNameOptions,
+        component: "Select",
+        type: "select",
+        selected: selectedTableName,
+        setSelected: setSelectedTableName,
+      },
+      {
+        name: "number_of_seats",
+        label: "Number of Seats",
+        options: numberOfSeatsOptions,
+        component: "Select",
+        type: "select",
+        selected: selectedNumberOfSeats,
+        setSelected: setSelectedNumberOfSeats,
+      },
+    ],
+    [
+      {
+        component: "Switch",
+        type: "radio",
+        label: "Extendable?",
+        isChecked: extendable,
+        setIsChecked: setExtendable,
+      },
+      {
+        name: "number_of_extending_seats",
+        label: "Extending Seats",
+        options: numberOfSeatsOptions,
+        component: "Select",
+        type: "select",
+        selected: selectedNumberOfExtendingSeats,
+        setSelected: setSelectedNumberOfExtendingSeats,
+        extraStyles: extendable ? "block" : "hidden",
+      },
+    ],
   ];
   // component functions
   const onSubmit = () => {
@@ -135,10 +136,10 @@ const CreateOrEditTable = () => {
           extendable
             ? {
                 name: selectedTableName,
-                number_of_seats: selectedNumberOfSeats,
+                number_of_seats: parseInt(selectedNumberOfSeats),
                 extendable: extendable,
                 number_of_extending_seats:
-                  extendable && selectedNumberOfExtendingSeats,
+                  extendable && parseInt(selectedNumberOfExtendingSeats),
               }
             : {
                 name: selectedTableName,
@@ -162,95 +163,92 @@ const CreateOrEditTable = () => {
   }, [globalTable]);
 
   return (
-    <section className="relative h-full">
-      <Title title={isEditingTable ? "Edit Table" : "Create Table"} />
-      <Line lineStyles="bg-c_yellow/100 w-[25px] h-[5px] rounded-full" />
+    <section className="duration-300 h-full flex flex-col justify-between">
+      <div className="space-y-5">
+        {/* Header */}
+        <ModalHeader
+          close={() => {
+            setGlobalTable(null),
+              setIsEditingTable(false),
+              setShowCreateOrEditTableModel(false);
+          }}
+          isEditing={isEditingTable}
+          editTitle="Editing Table"
+          createTitle="Creating a Table"
+        />
 
-      {/* fields */}
-      <div className="sm:flex justify-center items-center">
-        <section className={formStyles}>
-          {tableInputs.map((tableInput, tableInputIndex) => (
-            <div
-              key={tableInputIndex}
-              className={`h-fit ${tableInputs.gap && "mt-5 sm:mt-0 "}`}
-            >
-              {tableInput.component === "Select" ? (
-                <div
-                  className={`input-group w-[250px] sm:w-[220px] md:w-[240px] ${tableInput.extraStyles} `}
-                >
-                  <div className="input">
-                    <Select
-                      title="-"
-                      options={tableInput.options}
-                      selected={tableInput.selected}
-                      setSelected={tableInput.setSelected}
-                    />
-                  </div>
+        <div>
+          {/* Body */}
+          <section className="px-4 space-y-5 sm:space-y-0 gap-x-3 sm:grid grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-c_yellow">
+            {/* Table Info Section */}
+            <section className="space-y-4 col-span-3">
+              <Title title="Table Info." />
 
-                  <label className="placeholder">{tableInput.label}</label>
-                </div>
-              ) : (
-                <div
-                  className={`mt-1 ml-2 sm:ml-4 w-[250px] sm:w-[200px] md:w-[240px]`}
-                >
-                  <CheckBox
-                    label={tableInput.label}
-                    checkLabelStyles="text-c_dark/50 text-base"
-                    checkIconsWrapper="bg-c_green_light rounded-full p-1"
-                    checkIconStyles="text-c_green"
-                    isChecked={extendable}
-                    setIsChecked={setExtendable}
+              <div className="space-y-5">
+                {tableInputs[0].map((tableInput, tableInputIndex) => (
+                  <Select
+                    key={tableInputIndex}
+                    title=""
+                    options={tableInput.options}
+                    selectWrapperStyles={`w-full rounded-md ring-c_gray  py-2 px-2`}
+                    selectPanelStyles="ring-c_gray/40 shadow h-[90px]"
+                    selected={tableInput.selected}
+                    setSelected={(option) => tableInput.setSelected(option)}
+                    selectLabel={tableInput.label}
+                    selectLabelStyles="border text-c_dark/50 rounded-full px-1"
                   />
-                </div>
-              )}
-            </div>
-          ))}
+                ))}
+              </div>
+            </section>
 
-          <div className={btnWrapper}>
-            <Button
-              title="Save"
-              icon={<BsSave className="w-5 h-5 text-white" />}
-              buttonStyles="flex items-center gap-x-2 px-4 py-2 bg-c_yellow rounded-xl text-white"
-              buttonTitleWrapperStyles="hidden sm:block"
-              purpose={onSubmit}
-            />
-          </div>
-        </section>
+            {/* Extending Table Decision Section */}
+            <section className="space-y-2 col-span-2 py-2 sm:py-0 sm:px-2">
+              <Title title="Extending Info." />
+
+              <div className="space-y-5">
+                {tableInputs[1].map((tableInput, tableInputIndex) =>
+                  tableInput.component === "Switch" ? (
+                    <CheckBox
+                      key={tableInputIndex}
+                      label={tableInput.label}
+                      checkLabelStyles="text-c_dark"
+                      checkIconStyles="text-c_yellow"
+                      isChecked={tableInput.isChecked}
+                      setIsChecked={tableInput.setIsChecked}
+                    />
+                  ) : (
+                    <Select
+                      key={tableInputIndex}
+                      title=""
+                      options={tableInput.options}
+                      selectWrapperStyles={`w-full rounded-md ring-c_gray  py-2 px-2 ${
+                        extendable ? "block" : "hidden"
+                      }`}
+                      selectPanelStyles="ring-c_gray/40 shadow h-[90px]"
+                      selected={tableInput.selected}
+                      setSelected={(option) => tableInput.setSelected(option)}
+                      selectLabel={tableInput.label}
+                      selectLabelStyles="border text-c_dark/50 rounded-full px-1"
+                    />
+                  )
+                )}
+              </div>
+            </section>
+          </section>
+        </div>
+      </div>
+
+      {/* Create Btn */}
+      <div className="px-4 py-2 flex justify-end">
+        <Button
+          title="Save"
+          icon={<BsSave className="w-5 h-5" />}
+          buttonStyles="primary_button"
+          purpose={onSubmit}
+        />
       </div>
     </section>
   );
 };
-
-// styles
-const formStyles = ctr(`
-  sm:grid 
-  grid-cols-2 
-  overflow-auto 
-  scrollbar-hide 
-  flex 
-  flex-col 
-  gap-y-3
-  items-center
-  duration-300 
-  h-[300px]
-  w-full
-  sm:h-[220px]
-  pt-5
-  pl-1
-`);
-
-const btnWrapper = ctr(`
-  mt-[30px] 
-  sm:mt-10 
-  px-3 
-  sm:pr-9 
-  flex 
-  justify-end  
-  absolute 
-  -bottom-[0px] 
-  sm:bottom-0 
-  w-fit 
-  right-0
-`);
 
 export default CreateOrEditTable;

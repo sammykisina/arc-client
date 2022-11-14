@@ -3,7 +3,7 @@ import { LocalStorage } from "../utils/localStorage";
 
 export const isSidebarOpenState = atom({
   key: "isSidebarOpenState",
-  default: false,
+  default: true,
 });
 
 export const showSidebarState = atom({

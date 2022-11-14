@@ -1,17 +1,8 @@
-// react framework imports
 import React, { useState } from "react";
-
-// icon imports {react icons}
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-
-// recoil imports {recoil and atoms}
 import { useSetRecoilState } from "recoil";
 import { currentUserRoleState, currentUserTokenState } from "../atoms/AppAtoms";
-
-// api layer imports
 import { AuthAPI } from "../api/authApi";
-
-// all components imports {local and packages}
 import { ArcLogo, Icon, Title } from "../components";
 import { useForm } from "react-hook-form";
 import { Toaster } from "react-hot-toast";
@@ -30,18 +21,12 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  // page functions
-  /**
-   * handle submit of login credentials
-   */
   const onSubmit = ({ work_id, password }) => {
-    // display a toast message if the password field is empty
     if (password.trim() === "") {
-      Notification.errorNotification("password cannot be empty");
+      Notification.errorNotification("Password Cannot Be Empty!");
       return;
     }
 
-    // login
     AuthAPI.login({
       work_id: work_id,
       password: password,

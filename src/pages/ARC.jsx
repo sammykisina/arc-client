@@ -1,23 +1,21 @@
-// react framework imports
-import React from "react";
-
-// icon imports {react icons}
+import { useCallback, useState } from "react";
+import { useEffect } from "react";
 import { IoCubeOutline } from "react-icons/io5";
 import { TiSpannerOutline } from "react-icons/ti";
 import { FaBuromobelexperte } from "react-icons/fa";
 import { RiBringForward } from "react-icons/ri";
-
-// all components imports {local and packages}
-import { Tab } from "../components";
-import { Products, Properties, Suppliers } from "../components";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useProduct, useProductVariant, useSuppliersList } from "../hooks";
+import {
+  Tab,
+  Products,
+  Properties,
+  Suppliers_Procurements_Tokens,
+} from "../components";
+import { useProduct, useProductVariant, useSupplier } from "../hooks";
 
 const ARC = () => {
   // page states
   const [index, setIndex] = useState(0);
-  const { getAllSuppliersFromDB } = useSuppliersList();
+  const { getAllSuppliersFromDB } = useSupplier();
   const { getAllProductsFromDB } = useProduct();
   const { getAllProductVariantsFromDB } = useProductVariant();
   const data = [
@@ -41,26 +39,29 @@ const ARC = () => {
     },
 
     {
-      label: "Suppliers",
+      label: "Suppliers-Procurements-Tokens",
       icon: <RiBringForward className="icon" />,
-      content: <Suppliers />,
+      content: <Suppliers_Procurements_Tokens />,
     },
   ];
 
   // get some global need data
-  useEffect(() => {
-    Promise.all([
-      getAllProductsFromDB(),
-      getAllProductVariantsFromDB(),
-      getAllSuppliersFromDB(),
-    ]);
-  }, []);
+  // useEffect(() => {
+
+  // }, []);
+  // useCallback(() => {
+  //   Promise.all([
+  //     getAllProductsFromDB(),
+  //     getAllProductVariantsFromDB(),
+  //     getAllSuppliersFromDB(),
+  //   ]);
+  // }, []);
 
   return (
     <section>
       <Tab
         tabsData={data}
-        tabsBodyStyles="lg:grid grid-cols-6"
+        tabsBodyStyles="lg:grid grid-cols-6 duration-300"
         iconsOnlyTabs
         index={index}
         setIndex={setIndex}

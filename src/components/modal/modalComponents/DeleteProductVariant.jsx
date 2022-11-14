@@ -1,6 +1,6 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { globalProductVariantState } from "../../../atoms/VariantAtom";
-import { showDeleteProductVariantModalState } from "../../../atoms/ModalAtoms";
+import { showDeleteProductVariantModalState } from "../../../atoms/ModalAtom";
 import { globalProductState } from "../../../atoms/ProductAtom";
 import { DeleteItem } from "../../";
 import { useProductVariant } from "../../../hooks";

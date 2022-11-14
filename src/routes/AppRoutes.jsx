@@ -1,22 +1,15 @@
 import React from "react";
-import { Dashboard, Bills, Employee, ARC, Counter, NotFound } from "../pages";
+import { Dashboard, Bills, ARC, Counter, NotFound, WorkForce } from "../pages";
 import { Routes, Route } from "react-router-dom";
 import { AdminSuperAdminBartenderPage, AdminSuperAdminPage } from "./";
+import { ROUTE_PATHS } from "../constants";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Dashboard />} />
+      <Route path={ROUTE_PATHS.DASHBOARD} element={<Dashboard />} />
       <Route
-        path="/employee"
-        element={
-          <AdminSuperAdminPage>
-            <Employee />
-          </AdminSuperAdminPage>
-        }
-      />
-      <Route
-        path="bills"
+        path={ROUTE_PATHS.BILLS}
         element={
           <AdminSuperAdminPage>
             <Bills />
@@ -24,25 +17,33 @@ const AppRoutes = () => {
         }
       />
       <Route
-        path="/arc"
+        path={ROUTE_PATHS.ARC}
         element={
           <AdminSuperAdminPage>
             <ARC />
           </AdminSuperAdminPage>
         }
       />
-
+        <Route
+          path={ROUTE_PATHS.COUNTER}
+          element={
+            <AdminSuperAdminBartenderPage>
+              <Counter />
+            </AdminSuperAdminBartenderPage>
+          }
+        />
       <Route
-        path="/counter"
+        path={ROUTE_PATHS.WORKFORCE}
         element={
-          <AdminSuperAdminBartenderPage>
-            <Counter />
-          </AdminSuperAdminBartenderPage>
+          <AdminSuperAdminPage>
+            <WorkForce />
+          </AdminSuperAdminPage>
         }
       />
-      <Route path="/notfound" element={<NotFound />} />
 
-      <Route path="*" element={<NotFound />} />
+      {/* <Route path="/notfound" element/={<NotFound />} /> */}
+
+      <Route path={ROUTE_PATHS.NOTFOUND} element={<NotFound />} />
     </Routes>
   );
 };

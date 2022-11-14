@@ -1,12 +1,12 @@
 import { useEffect, useCallback } from "react";
-import { HiPlus } from "react-icons/hi";
+import { HiPlus, HiPlusSm } from "react-icons/hi";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { Button, SpinnerLoader, Table } from "../../../";
 import { isSidebarOpenState } from "../../../../atoms/AppAtoms";
 import {
   showCreateOrEditProductState,
   showCreateOrEditProductVariantModalState,
-} from "../../../../atoms/ModalAtoms";
+} from "../../../../atoms/ModalAtom";
 import { useProduct, useProductVariant } from "../../../../hooks";
 
 const ProductsAndVariants = () => {
@@ -95,14 +95,12 @@ const ProductsAndVariants = () => {
         )}
       </div>
 
-      {/* the add product or variant btns */}
+      {/* Add Product And Variant Btns */}
       <div className="flex flex-row gap-x-2 justify-end w-full absolute bottom-0">
-        {/* the add product button */}
         <Button
           title="Product"
-          icon={<HiPlus className="w-5 h-5 text-c_white" />}
-          buttonStyles="primaryButton"
-          buttonTitleWrapperStyles="hidden sm:block"
+          icon={<HiPlusSm className="w-5 h-5" />}
+          buttonStyles="primary_button"
           purpose={() => {
             setShowCreateOrEditProduct(true);
           }}
@@ -110,9 +108,8 @@ const ProductsAndVariants = () => {
 
         <Button
           title="Variant"
-          icon={<HiPlus className="w-5 h-5 text-c_white" />}
-          buttonStyles="primaryButton"
-          buttonTitleWrapperStyles="hidden sm:block"
+          icon={<HiPlusSm className="w-5 h-5 " />}
+          buttonStyles="primary_button"
           purpose={() => {
             setShowCreateOrEditProductVariantModal(true);
           }}

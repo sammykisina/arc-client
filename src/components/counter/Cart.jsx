@@ -1,20 +1,10 @@
-// react framework imports
 import React, { useMemo } from "react";
-
-// icon imports {react icons}
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
-
-// recoil imports {recoil and atoms}
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { cartItemsState } from "../../atoms/CartAtom";
-import { showCreateOrEditOrderModalState } from "../../atoms/ModalAtoms";
-
-// api layer imports
-
-// all components imports {local and packages}
+import { showCreateOrEditOrderModalState } from "../../atoms/ModalAtom";
 import { Button, InteractiveButton, Modal, Stepper, Table, ToolTip } from "../";
-import ctr from "@netlify/classnames-template-literals";
 import useCart from "../../hooks/useCart";
 import { OrderInfo } from "../ui-reusable-small-components/order";
 import { globalOrderObjectState } from "../../atoms/OrderAtom";
@@ -144,7 +134,7 @@ const Cart = () => {
             >
               <Button
                 icon={<BiMinus className="" />}
-                buttonStyles={actionButtonStyles}
+                // buttonStyles={actionBu/ttonStyles}
                 purpose={() => decreaseCartItemsQuantity(cartItem)}
               />
 
@@ -155,7 +145,7 @@ const Cart = () => {
 
               <Button
                 icon={<BiPlus className="" />}
-                buttonStyles={actionButtonStyles}
+                // buttonStyles={actionButtonStyles}
                 purpose={() => addItemToCart(cartItem)}
                 disabled={
                   cartItem?.itemQuantity >= cartItem?.attributes?.assigned
@@ -234,17 +224,17 @@ const Cart = () => {
 };
 
 //  styles
-const actionButtonStyles = ctr(`
-  bg-c_green_light 
-  text-c_green 
-  p-1 
-  rounded-full
-  hover:text-c_dark
-  hover:bg-c_green_light/50
-  col-span-1
-  disabled:cursor-not-allowed
-  disabled:bg-c_green_light/50
-  disabled:text-c_green/50
-`);
+// const actionButtonStyles = ctr(`
+//   bg-c_green_light
+//   text-c_green
+//   p-1
+//   rounded-full
+//   hover:text-c_dark
+//   hover:bg-c_green_light/50
+//   col-span-1
+//   disabled:cursor-not-allowed
+//   disabled:bg-c_green_light/50
+//   disabled:text-c_green/50
+// `);
 
 export default Cart;

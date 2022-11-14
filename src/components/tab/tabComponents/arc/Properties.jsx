@@ -23,7 +23,7 @@ const Properties = () => {
         tabsData={propertiesTabs}
         labelsOnlyTabs
         labelsOnlyTabsStyles="flex flex-row  mb-4 flex-wrap duration-300 gap-2"
-        tabsContentHeight="h-[530px] md:h-[530px] lg:h-[575px]"
+        tabsContentHeight="h-fit"
         index={index}
         setIndex={setIndex}
       />

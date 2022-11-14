@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useProduct } from "../../../../hooks";
-import { Button, CheckBox, Select } from "../../..";
+import { Button, CheckBox, Select, Title } from "../../..";
 import { useForm } from "react-hook-form";
 import { BsSave } from "react-icons/bs";
 import { Notification } from "../../../../utils/notifications";
-import { showCreateOrEditProductState } from "../../../../atoms/ModalAtoms";
+import { showCreateOrEditProductState } from "../../../../atoms/ModalAtom";
 import {
   globalProductState,
   isEditingProductState,
@@ -128,81 +128,117 @@ const Independent = () => {
           globalProduct?.attributes?.inventory?.store,
       });
 
-      setSelectedCategory({
-        name: globalProduct?.relationships?.category?.attributes?.name,
-        value: globalProduct?.relationships?.category?.id,
-      });
+      if (globalProduct?.relationships?.category) {
+        setSelectedCategory({
+          name: globalProduct?.relationships?.category?.attributes?.name,
+          value: globalProduct?.relationships?.category?.id,
+        });
+      }
 
       setAllowVAT(globalProduct?.attributes?.vat);
     }
   }, [globalProduct]);
 
   return (
-    <div className="relative h-[320px] sm:h-[200px]">
-      <form
-        className="h-[270px] sm:h-[200px]  overflow-auto sm:items-center  pt-3 pb-6 px-1 flex flex-col gap-5 sm:grid grid-cols-2"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        {independentProductInputs.map(
-          (independentProductInput, independentProductInputIndex) => (
-            <div key={independentProductInputIndex}>
-              {independentProductInput.component === "Input" ? (
-                <div className={`input-group`}>
-                  <input
-                    type={independentProductInput.type}
-                    placeholder=""
-                    {...register(independentProductInput.name, {
-                      required: independentProductInput.required,
-                    })}
-                    readOnly={independentProductInput.readonly}
-                    className="input mt-1"
-                  />
+    <section className="relative">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <section className="space-y-5 sm:space-y-0 gap-x-3 px-2 overflow-y-auto h-[260px] sm:h-[200px] sm:pb-2 sm:grid grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-c_yellow">
+          {/* Product General Info Section*/}
+          <section className="space-y-4 col-span-2">
+            <Title title="General Info." />
 
-                  <label className="placeholder border">
-                    {independentProductInput.label}
-                  </label>
+            <div className="space-y-5">
+              {independentProductInputs[0].map(
+                (independentProductInput, independentProductInputIndex) => (
+                  <div key={independentProductInputIndex}>
+                    {independentProductInput.component === "Input" ? (
+                      <div className={`input-group`}>
+                        <input
+                          type={independentProductInput.type}
+                          placeholder=""
+                          {...register(independentProductInput.name, {
+                            required: independentProductInput.required,
+                          })}
+                          readOnly={independentProductInput.readonly}
+                          className="input"
+                        />
 
-                  {errors[independentProductInput.name] && (
-                    <span className="error">
-                      {independentProductInput.errorMessage}
-                    </span>
-                  )}
-                </div>
-              ) : independentProductInput.component === "Select" ? (
-                <Select
-                  title=""
-                  options={independentProductInput.options}
-                  selectWrapperStyles="w-full rounded-md ring-c_gray  py-2 px-2"
-                  selectPanelStyles="ring-c_gray/40 shadow h-[70px]"
-                  selected={selectedCategory}
-                  setSelected={(option) => setSelectedCategory(option)}
-                  selectLabel="Product Category"
-                  selectLabelStyles="border text-base text-c_dark/50 rounded-full px-1"
-                />
-              ) : (
-                <CheckBox
-                  label="Allow VAT?"
-                  checkLabelStyles="text-c_dark/50"
-                  checkIconStyles="text-c_yellow"
-                  isChecked={allowVAT}
-                  setIsChecked={setAllowVAT}
-                />
+                        <label className="placeholder border">
+                          {independentProductInput.label}
+                        </label>
+
+                        {errors[independentProductInput.name] && (
+                          <span className="error">
+                            {independentProductInput.errorMessage}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <Select
+                        title=""
+                        options={independentProductInput.options}
+                        selectWrapperStyles={`w-full rounded-md ring-c_gray  py-2 px-2`}
+                        selectPanelStyles="ring-c_gray/40 shadow h-[90px]"
+                        selected={selectedCategory}
+                        setSelected={(option) => setSelectedCategory(option)}
+                        selectLabel={independentProductInput.label}
+                        selectLabelStyles="border text-c_dark/50 rounded-full px-1"
+                      />
+                    )}
+                  </div>
+                )
               )}
             </div>
-          )
-        )}
+          </section>
 
-        <div className="absolute bottom-0  right-0">
+          {/* Product Prices Section */}
+          <section className="space-y-3 col-span-3 py-2 sm:py-0 sm:px-2">
+            <Title title="Prices." />
+
+            <div className="space-y-4">
+              {independentProductInputs[1].map(
+                (independentProductInput, independentProductInputIndex) => (
+                  <div
+                    className={`input-group`}
+                    key={independentProductInputIndex}
+                  >
+                    <input
+                      type={independentProductInput.type}
+                      placeholder=""
+                      {...register(independentProductInput.name, {
+                        required: independentProductInput.required,
+                      })}
+                      readOnly={independentProductInput.readonly}
+                      className="input mt-1"
+                    />
+
+                    <label className="placeholder border">
+                      {independentProductInput.label}
+                    </label>
+
+                    {errors[independentProductInput.name] && (
+                      <span className="error">
+                        {independentProductInput.errorMessage}
+                      </span>
+                    )}
+                  </div>
+                )
+              )}
+            </div>
+          </section>
+        </section>
+
+        {/* Delete  Btn*/}
+        <div className="absolute -bottom-[60px] sm:bottom-0 sm:right-5  right-0 px-4 py-2">
           <Button
             title="Save"
-            icon={<BsSave className="w-5 h-5 text-white" />}
-            buttonStyles="flex items-center gap-x-2 px-4 py-2 bg-c_yellow rounded-xl text-white"
-            buttonTitleWrapperStyles="hidden sm:block"
+            icon={<BsSave className="w-5 h-5" />}
+            buttonStyles="primary_button"
             type="submit"
           />
         </div>
       </form>
-    </div>
+    </section>
   );
 };
 

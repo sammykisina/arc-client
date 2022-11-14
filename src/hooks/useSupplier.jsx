@@ -1,14 +1,16 @@
 import { useState, useMemo } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { SuppliersListsAPI } from "../api/suppliersListAPI";
+import { SupplierAPI } from "../api/supplierAPI";
 import {
   allSuppliersFromDBState,
   globalSupplierState,
   isEditingSupplierState,
-} from "../atoms/SuppliersListAtom";
+} from "../atoms/SupplierAtom";
 import { Button, Icon, ToolTip } from "../components";
 import {
   AvatarCell,
+  DeleteAction,
+  EditAction,
   LocationFilter,
   StatusFilter,
   StatusPill,
@@ -21,10 +23,11 @@ import {
   showAddSupplyItemModalState,
   showCreateOrEditSupplierModalState,
   showDeleteSupplierModalState,
-} from "../atoms/ModalAtoms";
-import { HiChevronDown, HiPlus } from "react-icons/hi";
+} from "../atoms/ModalAtom";
+import { HiChevronDown, HiPlus, HiPlusSm } from "react-icons/hi";
 import { allProductsFromDBState } from "../atoms/ProductAtom";
 import { allProductVariantsFromDBState } from "../atoms/VariantAtom";
+import { supplierStatuses } from "../constants";
 
 const useSuppliersList = () => {
   /**
@@ -54,7 +57,7 @@ const useSuppliersList = () => {
     showAddSupplyItemModalState
   );
 
-  const generateSupplierSupplyItems = () => {
+  const generateSupplyItems = () => {
     const supplierSupplyItems = new Set();
 
     allProductsFromDB
@@ -87,72 +90,63 @@ const useSuppliersList = () => {
   };
 
   const supplierInputs = [
-    {
-      name: "name",
-      label: "Supplier Name",
-      errorMessage: "Enter supplier name",
-      component: "Input",
-      required: true,
-      type: "text",
-    },
-    {
-      name: "supplier_supply_items",
-      label: "Supplier Current Supplied Items",
-      errorMessage: "Choose status",
-      options: generateSupplierSupplyItems(),
-      component: "Select",
-      multiple: true,
-      selected: selectedSupplierSupplyItems,
-      setSelected: setSelectedSupplierSupplyItems,
-      extraStyles: "hidden",
-    },
-    {
-      name: "location",
-      label: "Supplier Location",
-      errorMessage: "Enter supplier location",
-      component: "Input",
-      required: true,
-      type: "text",
-    },
-    {
-      name: "status",
-      label: "Supplier Current Status",
-      errorMessage: "Choose status",
-      options: [
-        {
-          name: "active",
-          value: "active",
-        },
-        {
-          name: "suspended",
-          value: "suspended",
-        },
-        {
-          name: "underreview",
-          value: "underreview",
-        },
-      ],
-      component: "Select",
-      multiple: false,
-      selected: selectedStatus,
-      setSelected: setSelectedStatus,
-    },
-    {
-      name: "phone_number",
-      label: "Supplier Phone Number",
-      errorMessage: "Enter supplier phone number",
-      component: "Input",
-      required: true,
-      type: "number",
-    },
-    {
-      name: "email",
-      label: "Supplier Email",
-      errorMessage: "Enter supplier email",
-      component: "Input",
-      required: true,
-      type: "email",
-    },
+    [
+      {
+        name: "name",
+        label: "Name",
+        errorMessage: "Enter supplier name",
+        component: "Input",
+        required: true,
+        type: "text",
+      },
+      {
+        name: "location",
+        label: "Location",
+        errorMessage: "Enter supplier location",
+        component: "Input",
+        required: true,
+        type: "text",
+      },
+      {
+        name: "phone_number",
+        label: "Supplier Phone Number",
+        errorMessage: "Enter supplier phone number",
+        component: "Input",
+        required: true,
+        type: "number",
+      },
+      {
+        name: "email",
+        label: "Supplier Email",
+        errorMessage: "Enter supplier email",
+        component: "Input",
+        required: true,
+        type: "email",
+      },
+    ],
+    [
+      {
+        name: "supplier_supply_items",
+        label: "Current Supplied Items",
+        errorMessage: "Choose status",
+        options: generateSupplyItems(),
+        component: "Select",
+        multiple: true,
+        selected: selectedSupplierSupplyItems,
+        setSelected: setSelectedSupplierSupplyItems,
+        extraStyles: "hidden",
+      },
+      {
+        name: "status",
+        label: "Current Status",
+        errorMessage: "Choose status",
+        options: supplierStatuses,
+        component: "Select",
+        multiple: false,
+        selected: selectedStatus,
+        setSelected: setSelectedStatus,
+      },
+    ],
   ];
 
   const suppliersListTableColumn = useMemo(
@@ -278,7 +272,7 @@ const useSuppliersList = () => {
 
   const getAllSuppliersFromDB = () => {
     setIsFetchingSuppliers(true);
-    SuppliersListsAPI.getAll()
+    SupplierAPI.getAll()
       .then((suppliers) => setAllSuppliersFromDB(suppliers))
       .finally(() => setIsFetchingSuppliers(false));
   };
@@ -324,26 +318,23 @@ const useSuppliersList = () => {
               className="flex gap-x-3 items-center"
               key={supplierFromDB?.attributes?.uuid}
             >
-              <Icon
-                icon={<MdDelete className="deleteActionButton " />}
+              <DeleteAction
                 purpose={() => {
                   setGlobalSupplier(supplierFromDB);
                   setShowDeleteSupplierModal(true);
                 }}
               />
-              <Icon
-                icon={<RiEditCircleFill className="editActionButton" />}
+              <EditAction
                 purpose={() => {
                   setGlobalSupplier(supplierFromDB),
                     setIsEditingSupplier(true),
                     setShowCreateOrEditSupplierModal(true);
                 }}
               />
-
               <ToolTip
                 component={
                   <Button
-                    icon={<HiPlus className="w-4 h-4 text-c_yellow" />}
+                    icon={<HiPlusSm className="w-6 h-6 text-c_yellow" />}
                     purpose={() => {
                       setGlobalSupplier(supplierFromDB),
                         setShowAddSupplyItemModal(true);
@@ -354,7 +345,6 @@ const useSuppliersList = () => {
               />
             </div>,
           ],
-          id: supplierFromDB?.id,
         },
       ];
     });
@@ -363,7 +353,7 @@ const useSuppliersList = () => {
   };
 
   const createSupplier = (supplierData) => {
-    SuppliersListsAPI.create(supplierData).then((response) => {
+    SupplierAPI.create(supplierData).then((response) => {
       if (response.error === 1)
         Notification.errorNotification(response.message);
       else {
@@ -383,50 +373,49 @@ const useSuppliersList = () => {
   };
 
   const updateSupplier = (supplierEditData, newData) => {
-    SuppliersListsAPI.update(
-      globalSupplier?.attributes?.uuid,
-      supplierEditData
-    ).then((response) => {
-      console.log("response", response);
-      if (response.error === 1)
-        Notification.errorNotification(response.message);
-      else {
-        const supplierBeingEdited = allSuppliersFromDB.find(
-          (supplierFromDB) =>
-            globalSupplier?.attributes?.uuid ===
-            supplierFromDB?.attributes?.uuid
-        );
+    SupplierAPI.update(globalSupplier?.attributes?.uuid, supplierEditData).then(
+      (response) => {
+        console.log("response", response);
+        if (response.error === 1)
+          Notification.errorNotification(response.message);
+        else {
+          const supplierBeingEdited = allSuppliersFromDB.find(
+            (supplierFromDB) =>
+              globalSupplier?.attributes?.uuid ===
+              supplierFromDB?.attributes?.uuid
+          );
 
-        const newUpdatedSuppliers = allSuppliersFromDB.map((supplierFromDB) =>
-          supplierFromDB?.attributes?.uuid ===
-          supplierBeingEdited?.attributes?.uuid
-            ? {
-                ...supplierBeingEdited,
-                attributes: {
-                  ...supplierBeingEdited?.attributes,
-                  name: newData.name,
-                  status: newData.selectedStatus.value,
-                  contact_info: {
-                    location: newData.location,
-                    phone_number: newData.phone_number,
-                    email: newData.email,
+          const newUpdatedSuppliers = allSuppliersFromDB.map((supplierFromDB) =>
+            supplierFromDB?.attributes?.uuid ===
+            supplierBeingEdited?.attributes?.uuid
+              ? {
+                  ...supplierBeingEdited,
+                  attributes: {
+                    ...supplierBeingEdited?.attributes,
+                    name: newData.name,
+                    status: newData.selectedStatus.value,
+                    contact_info: {
+                      location: newData.location,
+                      phone_number: newData.phone_number,
+                      email: newData.email,
+                    },
                   },
-                },
-              }
-            : supplierFromDB
-        );
+                }
+              : supplierFromDB
+          );
 
-        setAllSuppliersFromDB(newUpdatedSuppliers);
-        Notification.successNotification(response.message);
+          setAllSuppliersFromDB(newUpdatedSuppliers);
+          Notification.successNotification(response.message);
+        }
+
+        setIsEditingSupplier(false);
+        setGlobalSupplier(null);
       }
-
-      setIsEditingSupplier(false);
-      setGlobalSupplier(null);
-    });
+    );
   };
 
   const addSupplierSupplyItems = (selectedSupplierSupplyItems) => {
-    SuppliersListsAPI.update(globalSupplier?.attributes?.uuid, {
+    SupplierAPI.update(globalSupplier?.attributes?.uuid, {
       items: selectedSupplierSupplyItems,
       type: "update_supplier_supply_items",
     }).then((response) => {
@@ -452,7 +441,7 @@ const useSuppliersList = () => {
     supplyItemId,
     supplyItemForm
   ) => {
-    SuppliersListsAPI.delete({
+    SupplierAPI.delete({
       supplier_id: supplierId,
       item_id: supplyItemId,
       item_form: supplyItemForm,
@@ -476,7 +465,7 @@ const useSuppliersList = () => {
   };
 
   const deleteSupplier = () => {
-    SuppliersListsAPI.delete({
+    SupplierAPI.delete({
       supplier_id: globalSupplier?.id,
       type: "delete_supplier",
     }).then((response) => {
@@ -493,14 +482,50 @@ const useSuppliersList = () => {
     });
   };
 
-  const getCurrentlyAssignedSupplierNames = () => {
-    const supplierNames = new Set();
+  const getCurrentlyCreatedSuppliers = () => {
+    const suppliers = new Set();
 
     allSuppliersFromDB?.forEach((supplierFromDB) => {
-      supplierNames.add(supplierFromDB?.attributes?.name);
+      suppliers.add({
+        name: supplierFromDB?.attributes?.name.toLowerCase(),
+        value: supplierFromDB?.id,
+        items: generateSupplierSuppliedItems(supplierFromDB),
+      });
     });
 
-    return [...supplierNames.values()];
+    return [...suppliers.values()];
+  };
+
+  const generateSupplierSuppliedItems = (supplier) => {
+    const items = new Set();
+    // "form" => ProcurementItemForms::box()->label,
+    // "form_quantity" => 2,
+
+    supplier?.relationships?.variants?.forEach((variant) => {
+      items.add({
+        name:
+          variant?.relationships?.product?.attributes?.name +
+          "_" +
+          variant?.attributes?.name +
+          "_" +
+          variant?.attributes?.measure +
+          "ml",
+        value: variant?.id,
+        type: "Variant",
+        measure: variant?.attributes?.measure,
+      });
+    });
+
+    supplier?.relationships?.products?.forEach((product) => {
+      items.add({
+        name: product?.attributes?.name,
+        value: product?.id,
+        type: "Product",
+        measure: product?.attributes?.measure,
+      });
+    });
+
+    return [...items.values()];
   };
 
   const getSupplierEditData = (newData) => {
@@ -548,8 +573,7 @@ const useSuppliersList = () => {
           retail: suppliedProduct?.attributes?.price?.retail,
           measure: suppliedProduct?.attributes?.measure,
           action: (
-            <Icon
-              icon={<MdDelete className="deleteActionButton" />}
+            <DeleteAction
               purpose={() => {
                 removeSupplierSupplyItem(
                   supplierId,
@@ -584,8 +608,7 @@ const useSuppliersList = () => {
           retail: suppliedVariant?.attributes?.price?.retail,
           measure: suppliedVariant?.attributes?.measure,
           action: (
-            <Icon
-              icon={<MdDelete className="deleteActionButton" />}
+            <DeleteAction
               purpose={() => {
                 removeSupplierSupplyItem(
                   supplierId,
@@ -609,11 +632,11 @@ const useSuppliersList = () => {
     getSuppliersDataForSuppliersListTable,
     supplierInputs,
     createSupplier,
-    getCurrentlyAssignedSupplierNames,
+    getCurrentlyCreatedSuppliers,
     deleteSupplier,
     getSupplierEditData,
     updateSupplier,
-    generateSupplierSupplyItems,
+    generateSupplyItems,
     selectedStatus,
     setSelectedStatus,
     selectedSupplierSupplyItems,

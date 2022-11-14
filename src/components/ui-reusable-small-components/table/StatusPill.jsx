@@ -6,16 +6,20 @@ const StatusPill = ({ value }) => {
 
   return (
     <span
-      className={`px-3 py-1 uppercase leading-loose text-xs rounded-full shadow-sm ${
+      className={`px-3 py-1 capitalize leading-loose text-xs rounded-full shadow-sm bg-gray-200/10 ${
         status.startsWith("active") || status.startsWith("in-order")
-          ? "bg-c_green text-white"
+          ? "text-green-500"
           : ""
       } ${
-        status.startsWith("inactive") || status.startsWith("out-of-order")
-          ? "bg-c_yellow/30 text-c_dark"
+        status.startsWith("inactive") ||
+        status.startsWith("cancelled") ||
+        status.startsWith("suspended")
+          ? "text-red-500"
           : ""
-      } ${status.startsWith("underreview") ? "bg-orange-400 text-white" : ""} ${
-        status.startsWith("suspended") ? "bg-red-400 text-white" : ""
+      } ${
+        status.startsWith("underreview") ? "bg-orange-400 text-white" : ""
+      }  ${status.startsWith("pending") ? " text-yellow-500" : ""}   ${
+        status.startsWith("delivered") ? " text-green-500" : ""
       }  `}
     >
       {status}

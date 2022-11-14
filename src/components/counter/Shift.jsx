@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { HiPlus } from "react-icons/hi";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { showCreateOrEditShiftState } from "../../atoms/ModalAtoms";
+import { showCreateOrEditShiftState } from "../../atoms/ModalAtom";
 import { Button, SpinnerLoader, Table } from "../";
 import { useEmployee, useShift } from "../../hooks";
 import {

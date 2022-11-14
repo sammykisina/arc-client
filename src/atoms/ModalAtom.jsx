@@ -79,3 +79,13 @@ export const showEditSupplyItemModalState = atom({
   key: "showEditSupplyItemModalState",
   default: false,
 });
+
+export const showCreateOrEditProcurementModalState = atom({
+  key: "showCreateOrEditProcurementModalState",
+  default: false,
+});
+
+export const showDeleteProcurementModalState = atom({
+  key: "showDeleteProcurementModalState",
+  default: false,
+});

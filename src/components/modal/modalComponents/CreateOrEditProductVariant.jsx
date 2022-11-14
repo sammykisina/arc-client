@@ -6,11 +6,17 @@ import {
   globalProductVariantState,
   isEditingProductVariantState,
 } from "../../../atoms/VariantAtom";
-import { showCreateOrEditProductVariantModalState } from "../../../atoms/ModalAtoms";
-import { Button, CheckBox, Line, Select, Title } from "../../";
+import { showCreateOrEditProductVariantModalState } from "../../../atoms/ModalAtom";
+import {
+  Button,
+  CheckBox,
+  ModalClose,
+  ModalHeader,
+  Select,
+  Title,
+} from "../../";
 import { useForm } from "react-hook-form";
 import { Notification } from "../../../utils/notifications";
-import ctr from "@netlify/classnames-template-literals";
 import { useProductVariant } from "../../../hooks";
 
 const CreateOrEditProductVariant = () => {
@@ -21,6 +27,7 @@ const CreateOrEditProductVariant = () => {
     isEditingProductVariantState
   );
   const [selectedProduct, setSelectedProduct] = useState("");
+  const [allowVAT, setAllowVAT] = useState(true);
   const setShowCreateOrEditProductVariantModal = useSetRecoilState(
     showCreateOrEditProductVariantModalState
   );
@@ -28,7 +35,6 @@ const CreateOrEditProductVariant = () => {
     globalProductVariantState
   );
   const [globalProduct, setGlobalProduct] = useRecoilState(globalProductState);
-  const [allowVAT, setAllowVAT] = useState(true);
   const {
     productVariantInputs,
     getCurrentlyAssignedProductVariantNamesAndMeasurePair,
@@ -146,52 +152,90 @@ const CreateOrEditProductVariant = () => {
   };
 
   return (
-    <section className="relative h-full">
-      <Title
-        title={
-          isEditingProductVariant
-            ? "Edit Product Variant."
-            : "Create Product Variant."
-        }
-      />
-      <Line lineStyles="bg-c_yellow/100 w-[25px] h-[5px] rounded-full" />
-
-      <Title
-        title={
-          isEditingProductVariant
-            ? "If updating the stock quantity, please use the update stock action instead."
-            : ""
-        }
-        titleStyles="text-red-500 text-center text-xs"
+    <section className="relative">
+      {/* Headers */}
+      <ModalHeader
+        close={() => {
+          setGlobalProductVariant(null),
+            setIsEditingProductVariant(false),
+            setShowCreateOrEditProductVariantModal(false);
+        }}
+        isEditing={isEditingProductVariant}
+        editTitle="Editing Product Variant"
+        createTitle="Creating A Product Variant"
       />
 
-      {/* fields */}
-      <div className="sm:flex justify-center items-center">
-        <form
-          className="h-[350px] sm:h-[250px] overflow-auto sm:items-center px-1 flex flex-col gap-5 sm:grid grid-cols-2 mt-4 sm:mt-0 pt-4"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          {productVariantInputs.map(
-            (productVariantInput, productVariantInputIndex) => (
-              <div key={productVariantInputIndex}>
-                {productVariantInput.component === "Select" ? (
-                  <Select
-                    title=""
-                    options={productVariantInput.options}
-                    selectWrapperStyles="w-full rounded-md ring-c_gray  py-2 px-2"
-                    selectPanelStyles="ring-c_gray/40 shadow h-[70px]"
-                    selected={selectedProduct}
-                    setSelected={(option) => setSelectedProduct(option)}
-                    selectLabel={productVariantInput.label}
-                    selectLabelStyles="border text-base text-c_dark/50 rounded-full px-1"
-                  />
-                ) : productVariantInput.component === "Input" ? (
-                  <div className={`input-group`}>
+      {/* Body */}
+      <form onSubmit={handleSubmit(onSubmit)} className="px-4 py-2">
+        <section className="space-y-5 sm:space-y-0 gap-x-3 px-2 overflow-y-auto h-[340px] sm:h-[300px] sm:pb-2 sm:grid grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-c_yellow">
+          {/* Product Variant General Info Section*/}
+          <section className="space-y-4 col-span-2">
+            <Title title="General Info." />
+
+            <div className="space-y-4">
+              {productVariantInputs[0].map(
+                (productVariantInput, productVariantInputIndex) => (
+                  <div key={productVariantInputIndex}>
+                    {productVariantInput.component === "Select" ? (
+                      <Select
+                        title=""
+                        options={productVariantInput.options}
+                        selectWrapperStyles={`w-full rounded-md ring-c_gray py-2 px-2`}
+                        selectPanelStyles="ring-c_gray/40 shadow h-[90px]"
+                        selected={selectedProduct}
+                        setSelected={(option) => setSelectedProduct(option)}
+                        selectLabel={productVariantInput.label}
+                        selectLabelStyles="border text-c_dark/50 rounded-full px-1"
+                      />
+                    ) : productVariantInput.component === "Input" ? (
+                      <div className={`input-group`}>
+                        <input
+                          type={productVariantInput.type}
+                          placeholder=""
+                          {...register(productVariantInput.name, {
+                            required: true,
+                          })}
+                          className="input"
+                        />
+
+                        <label className="placeholder border">
+                          {productVariantInput.label}
+                        </label>
+
+                        {errors[productVariantInput.name] && (
+                          <span className="error">
+                            {productVariantInput.errorMessage}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <CheckBox
+                        label="VAT"
+                        checkLabelStyles="text-c_dark"
+                        checkIconStyles="text-c_yellow"
+                        isChecked={allowVAT}
+                        setIsChecked={setAllowVAT}
+                      />
+                    )}
+                  </div>
+                )
+              )}
+            </div>
+          </section>
+
+          {/* Product Variant Prices Section */}
+          <section className="space-y-4 col-span-3 py-2 sm:py-0 sm:px-2">
+            <Title title="Prices." />
+
+            <div className="space-y-5">
+              {productVariantInputs[1].map(
+                (productVariantInput, productVariantInputIndex) => (
+                  <div className={`input-group`} key={productVariantInputIndex}>
                     <input
                       type={productVariantInput.type}
                       placeholder=""
                       {...register(productVariantInput.name, {
-                        required: true,
+                        required: productVariantInput.required,
                       })}
                       className="input"
                     />
@@ -206,66 +250,24 @@ const CreateOrEditProductVariant = () => {
                       </span>
                     )}
                   </div>
-                ) : (
-                  <CheckBox
-                    label="VAT"
-                    checkLabelStyles="text-c_dark"
-                    checkIconStyles="text-c_yellow"
-                    isChecked={allowVAT}
-                    setIsChecked={setAllowVAT}
-                  />
-                )}
-              </div>
-            )
-          )}
+                )
+              )}
+            </div>
+          </section>
+        </section>
 
-          <div className={btnWrapper}>
-            <Button
-              title="Save"
-              icon={<BsSave className="w-5 h-5 text-white" />}
-              buttonStyles="flex items-center gap-x-2 px-4 py-2 bg-c_yellow rounded-xl text-white"
-              buttonTitleWrapperStyles="hidden sm:block"
-              type="submit"
-            />
-          </div>
-        </form>
-      </div>
+        {/* Delete  Btn*/}
+        <div className="absolute -bottom-[60px] sm:bottom-0 sm:right-5  right-0 px-4 py-2">
+          <Button
+            title="Save"
+            icon={<BsSave className="w-5 h-5" />}
+            buttonStyles="primary_button"
+            type="submit"
+          />
+        </div>
+      </form>
     </section>
   );
 };
-
-// styles
-const formStyles = ctr(`
-  sm:grid 
-  grid-cols-2 
-  overflow-auto 
-  scrollbar-hide 
-  flex 
-  flex-col 
-  items-center
-  duration-300 
-  gap-4
-  h-[350px]
-  w-full
-  sm:h-[220px]
-  sm:pt-2
-  mt-2
-  pt-5
-  pl-1
-`);
-
-const btnWrapper = ctr(`
-  mt-[30px] 
-  sm:mt-10 
-  px-3 
-  sm:pr-9 
-  flex 
-  justify-end  
-  absolute 
-  -bottom-[0px] 
-  sm:bottom-0 
-  w-fit 
-  right-0
-`);
 
 export default CreateOrEditProductVariant;

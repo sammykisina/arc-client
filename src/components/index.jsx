@@ -4,6 +4,7 @@ export { default as TopHeader } from "./TopHeader";
 
 // modal imports
 export { default as Modal } from "./modal/Modal";
+export { default as ModalClose } from "./modal/ModalClose";
 export { default as CreateOrEditProduct } from "./modal/modalComponents/CreateOrEditProduct";
 export { default as CreateOrEditEmployee } from "./modal/modalComponents/CreateOrEditEmployee";
 export { default as DeleteEmployee } from "./modal/modalComponents/DeleteEmployee";
@@ -19,6 +20,8 @@ export { default as DeleteTable } from "./modal/modalComponents/DeleteTable";
 export { default as CreateOrEditSupplier } from "./modal/modalComponents/CreateOrEditSupplier";
 export { default as DeleteSupplier } from "./modal/modalComponents/DeleteSupplier";
 export { default as AddSupplyItem } from "./modal/modalComponents/AddSupplyItem";
+export { default as CreateOrEditProcurement } from "./modal/modalComponents/CreateOrEditProcurement";
+export { default as DeleteProcurement } from "./modal/modalComponents/DeleteProcurement";
 
 // ui-html-small-components imports
 export { default as Icon } from "./ui-html-small-components/Icon";
@@ -44,6 +47,7 @@ export { default as SpinnerLoader } from "./ui-reusable-small-components/Spinner
 export { default as Line } from "./ui-reusable-small-components/Line";
 export { default as Stepper } from "./ui-reusable-small-components/Stepper";
 export { default as DeleteItem } from "./ui-reusable-small-components/DeleteItem";
+export { default as ModalHeader } from "./ui-reusable-small-components/ModalHeader";
 
 // counter imports
 export { default as Shift } from "./counter/Shift";
@@ -69,6 +73,12 @@ export { default as Properties } from "./tab/tabComponents/arc/Properties";
 // properties own tabs
 export { default as Tables } from "./tab/tabComponents/properties/Tables";
 
-export { default as Suppliers } from "./tab/tabComponents/arc/Suppliers";
-// suppliers own tabs
-export { default as SuppliersList } from "./tab/tabComponents/suppliers/SuppliersList";
+export { default as Suppliers_Procurements_Tokens } from "./tab/tabComponents/arc/Suppliers_Procurements_Tokens";
+// suppliers-procurements-tokens own tabs
+export { default as Suppliers } from "./tab/tabComponents/suppliers-procurements-tokens/Suppliers";
+export { default as Procurements } from "./tab/tabComponents/suppliers-procurements-tokens/Procurements";
+export { default as Tokens } from "./tab/tabComponents/suppliers-procurements-tokens/Tokens";
+
+// workforce tabs
+export { default as Employees } from "./tab/tabComponents/workforce/Employees";
+export { default as Payroll } from "./tab/tabComponents/workforce/Payroll";

@@ -38,9 +38,9 @@ const Tab = ({
 
   return (
     <section>
-      <div className={`${tabsBodyStyles}`}>
-        {/* btn container */}
-        <div
+      <section className={`${tabsBodyStyles}`}>
+        {/* Tab Btns */}
+        <section
           className={`duration-300 ${
             iconsOnlyTabs ? iconsOnlyTabsStyles : labelsOnlyTabsStyles
           }`}
@@ -82,26 +82,26 @@ const Tab = ({
                 />
 
                 <Line
-                  lineStyles={`${
+                  lineStyles={`duration-300 w-[30px] h-[5px]  rounded-full ${
                     singleTabsDataIndex === index
-                      ? "bg-c_yellow block"
-                      : "hidden"
-                  }  w-[30px] h-[5px] rounded-full`}
+                      ? "bg-c_yellow"
+                      : "bg-c_yellow w-[5px] h-[5px] bg-c_yellow/60"
+                  }`}
                 />
               </div>
             )
           )}
-        </div>
+        </section>
 
-        {/* tabs info*/}
-        <article
-          className={`col-span-5 overflow-y-scroll ${tabsContentHeight}  scrollbar-hide ${
+        {/* Tab Info */}
+        <section
+          className={`col-span-5 overflow-y-scroll duration-300 ${tabsContentHeight}  scrollbar-hide ${
             iconsOnlyTabs && "lg:-ml-4 xl:-ml-10"
           }`}
         >
           {content}
-        </article>
-      </div>
+        </section>
+      </section>
     </section>
   );
 };

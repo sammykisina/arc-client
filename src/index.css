@@ -54,7 +54,7 @@
   }
 
   .modal {
-    @apply max-w-[650px] bg-white rounded-3xl overflow-clip relative;
+    @apply max-w-[650px] bg-white rounded-3xl overflow-clip relative h-fit;
   }
 
   .input-group {
@@ -62,11 +62,11 @@
   }
 
   .input {
-    @apply px-5 py-2 bg-white rounded-md outline-none text-c_dark border border-c_gray w-full mt-1;
+    @apply px-5 py-2 bg-white rounded-md outline-none text-c_dark border border-c_gray w-full;
   }
 
   .placeholder {
-    @apply absolute top-[10px] left-[8px] text-base px-1 text-c_dark/50 duration-300;
+    @apply absolute top-[10px] left-[8px] text-sm px-1 text-c_dark/50 duration-300;
   }
 
   .input:focus + .placeholder,
@@ -94,12 +94,20 @@
     @apply transition-all duration-300 ease-linear;
   }
 
-  .primaryButton {
-    @apply flex gap-x-2 px-6 py-3  rounded-3xl text-white uppercase text-sm bg-c_yellow  hover:bg-c_yellow/80 items-center justify-center;
+  .button {
+    @apply flex gap-x-2 px-6 py-3  rounded-3xl text-white uppercase text-sm items-center justify-center;
+  }
+
+  .primary_button {
+    @apply button bg-c_yellow  hover:text-c_dark;
+  }
+
+  .delete_primary_button {
+    @apply button bg-red-500  hover:text-c_dark;
   }
 
   .toolTipBox {
-    @apply relative bg-c_green_light  rounded-xl px-4 py-2 after:absolute after:top-full after:left-1/2 after:block after:-translate-x-1/2 after:border-8 after:border-b-0 after:border-transparent after:border-t-c_green_light after:content-[''] text-c_green;
+    @apply relative bg-c_green_light  rounded-xl px-4 py-2 after:absolute after:top-full after:left-1/2 after:block after:-translate-x-1/2 after:border-8 after:border-b-0 after:border-transparent after:border-t-transparent sm:after:border-t-c_green_light after:content-[''] text-c_green;
   }
 
   .step_item {

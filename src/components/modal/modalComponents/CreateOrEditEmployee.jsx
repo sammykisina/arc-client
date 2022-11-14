@@ -5,25 +5,24 @@ import {
   globalEmployeeState,
   isEditingEmployeeState,
 } from "../../../atoms/EmployeeAtom";
-import { showCreateOrEditEmployeeModalState } from "../../../atoms/ModalAtoms";
+import { showCreateOrEditEmployeeModalState } from "../../../atoms/ModalAtom";
 import { useForm } from "react-hook-form";
-import { Title, Select, Button, Line } from "../..";
+import { Title, Select, Button, Line, ModalHeader } from "../..";
 import { Notification } from "../../../utils/notifications";
-import ctr from "@netlify/classnames-template-literals";
 import { useEmployee } from "../../../hooks";
 
 const CreateOrEditEmployee = () => {
   /**
    * component states
    */
-  const [selectedRole, setSelectedRole] = useState("");
   const [isEditingEmployee, setIsEditingEmployee] = useRecoilState(
     isEditingEmployeeState
   );
   const setShowCreateEmployeeModal = useSetRecoilState(
     showCreateOrEditEmployeeModalState
   );
-  const globalEmployee = useRecoilValue(globalEmployeeState);
+  const [globalEmployee, setGlobalEmployee] =
+    useRecoilState(globalEmployeeState);
 
   const {
     register,
@@ -37,6 +36,8 @@ const CreateOrEditEmployee = () => {
     getEmployeeEditData,
     createEmployee,
     updateEmployee,
+    selectedRole,
+    setSelectedRole,
   } = useEmployee();
 
   /**
@@ -131,58 +132,108 @@ const CreateOrEditEmployee = () => {
   }, [globalEmployee]);
 
   return (
-    <section className="relative">
-      {/* title */}
-      <Title
-        title={isEditingEmployee ? "Edit Employee" : "Create an Employee."}
-      />
+    <section className="space-y-2 relative">
+      {/* Header */}
+      <section>
+        <ModalHeader
+          close={() => {
+            setGlobalEmployee(null),
+              setIsEditingEmployee(false),
+              setShowCreateEmployeeModal(false);
+          }}
+          isEditing={isEditingEmployee}
+          editTitle="Editing Employee"
+          createTitle="Creating An Employee"
+        />
+      </section>
 
-      <Line lineStyles="bg-c_yellow/100 w-[25px] h-[5px] rounded-full" />
-      {/* fields */}
-      <form className={formStyles} onSubmit={handleSubmit(onSubmit)}>
-        {employeeInputs.map((employeeInput, employeeInputIndex) => (
-          <div
-            key={employeeInputIndex}
-            className={`h-fit ${employeeInput.gap && "mt-5 sm:mt-0 "}`}
-          >
-            {employeeInput.component === "Input" ? (
-              <div className="input-group w-[250px] sm:w-[220px] md:w-[240px]">
-                <input
-                  type={employeeInput.type}
-                  placeholder=""
-                  {...register(employeeInput.name, { required: true })}
-                  className="input"
-                />
+      {/* Body */}
+      <form className="" onSubmit={handleSubmit(onSubmit)}>
+        <div className="h-[350px] sm:h-fit overflow-y-auto sm:grid grid-cols-2 gap-x-2 px-4 space-y-4 sm:space-y-0 border-b divide-y sm:divide-y-0 sm:divide-x  divide-c_yellow sm:pb-2 sm:max-h-[250px]">
+          {/* General Employee Info Section */}
+          <section className="space-y-3">
+            <Title title="General Info." />
 
-                <label className="placeholder">{employeeInput.label}</label>
-
-                {errors[employeeInput.name] && (
-                  <span className="error">{employeeInput.errorMessage}</span>
-                )}
-              </div>
-            ) : (
-              <div className="input-group w-[250px] sm:w-[220px] md:w-[240px]">
-                <div className="input">
-                  <Select
-                    title="-"
-                    options={employeeInput.options}
-                    selected={selectedRole}
-                    setSelected={setSelectedRole}
+            <div className="space-y-3">
+              {employeeInputs[0].map((employeeInput, employeeInputIndex) => (
+                <div className={`input-group`} key={employeeInputIndex}>
+                  <input
+                    type={employeeInput.type}
+                    placeholder=""
+                    {...register(employeeInput.name, {
+                      required: employeeInput.required,
+                    })}
+                    readOnly={employeeInput.readonly}
+                    className="input"
                   />
+
+                  <label className="placeholder border">
+                    {employeeInput.label}
+                  </label>
+
+                  {errors[employeeInput.name] && (
+                    <span className="error">{employeeInput.errorMessage}</span>
+                  )}
                 </div>
+              ))}
+            </div>
+          </section>
 
-                <label className="placeholder">{employeeInput.label}</label>
-              </div>
-            )}
-          </div>
-        ))}
+          {/* Specific Employee Info Section */}
+          <section className="space-y-4 py-2 sm:py-0 sm:px-2">
+            <Title title="Specific Info." />
 
-        <div className={btnWrapper}>
+            <div className="space-y-3">
+              {employeeInputs[1].map((employeeInput, employeeInputIndex) => (
+                <div className="" key={employeeInputIndex}>
+                  {employeeInput.component === "Select" ? (
+                    <Select
+                      title=""
+                      options={employeeInput.options}
+                      selectWrapperStyles={`w-full rounded-md ring-c_gray  py-2 px-2`}
+                      selectPanelStyles="ring-c_gray/40 shadow h-[90px]"
+                      selected={employeeInput.selected}
+                      setSelected={(option) =>
+                        employeeInput.setSelected(option)
+                      }
+                      selectLabel={employeeInput.label}
+                      selectLabelStyles="border text-c_dark/50 rounded-full px-1"
+                    />
+                  ) : (
+                    <div className={`input-group`}>
+                      <input
+                        type={employeeInput.type}
+                        placeholder=""
+                        {...register(employeeInput.name, {
+                          required: employeeInput.required,
+                        })}
+                        readOnly={employeeInput.readonly}
+                        className="input"
+                      />
+
+                      <label className="placeholder border">
+                        {employeeInput.label}
+                      </label>
+
+                      {errors[employeeInput.name] && (
+                        <span className="error">
+                          {employeeInput.errorMessage}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <div className="absolute -bottom-[50px] px-4 right-0">
           <Button
             title="Save"
             type="submit"
-            icon={<BsSave className="w-5 h-5 text-white" />}
-            buttonStyles="primaryButton"
+            icon={<BsSave className="w-5 h-5" />}
+            buttonStyles="primary_button"
             buttonTitleWrapperStyles="hidden sm:block"
           />
         </div>
@@ -190,39 +241,4 @@ const CreateOrEditEmployee = () => {
     </section>
   );
 };
-
-// styles
-const formStyles = ctr(`
-  sm:grid 
-  grid-cols-2 
-  overflow-auto 
-  scrollbar-hide 
-  flex 
-  flex-col 
-  items-center
-  duration-300 
-  gap-4
-  h-[350px]
-  w-full
-  sm:h-[220px]
-  sm:pt-2
-  mt-2
-  py-8
-  sm:py-5
-  pl-1
-`);
-
-const btnWrapper = ctr(`
-  mt-[30px] 
-  sm:mt-10 
-  px-3 
-  sm:pr-9 
-  flex 
-  justify-end  
-  absolute 
-  -bottom-[50px] 
-  sm:-bottom-[60px] 
-  w-fit 
-  right-0
-`);
 export default CreateOrEditEmployee;

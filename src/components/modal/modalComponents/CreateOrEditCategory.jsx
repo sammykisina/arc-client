@@ -7,8 +7,8 @@ import {
   isEditingCategoryState,
 } from "../../../atoms/CategoryAtom";
 import { Notification } from "../../../utils/notifications";
-import { Title, Button, Line } from "../../";
-import { showCreateOrEditCategoryModalState } from "../../../atoms/ModalAtoms";
+import { Button, ModalHeader } from "../../";
+import { showCreateOrEditCategoryModalState } from "../../../atoms/ModalAtom";
 import { useCategory } from "../../../hooks";
 
 const CreateOrEditCategory = () => {
@@ -87,21 +87,50 @@ const CreateOrEditCategory = () => {
   }, [globalCategory]);
 
   return (
-    <section className="relative  h-full">
-      <Title title={isEditingCategory ? "Edit Category" : "Create Category"} />
-      <Line lineStyles="bg-c_yellow/100 w-[25px] h-[5px] rounded-full" />
+    <section className="space-y-4">
+      {/* Header */}
+      <ModalHeader
+        close={() => {
+          setGlobalCategory(null),
+            setIsEditingCategory(false),
+            setShowCreateOrEditCategory(false);
+        }}
+        isEditing={isEditingCategory}
+        editTitle="Editing Category"
+        createTitle="Creating A Category"
+      />
 
-      {/* fields */}
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
+      {/* Body */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 px-4 ">
         {categoryInputs.map((categoryInput, categoryInputIndex) => (
           <div key={categoryInputIndex}>
             {categoryInput.component === "Input" ? (
-              <div className="input-group w-[250px] sm:w-[220px] md:w-[240px]">
-                <input
+              <div className=" w-full sm:w-1/2">
+                <div className="input-group">
+                  <input
+                    type={categoryInput.type}
+                    placeholder=""
+                    {...register(categoryInput.name, { required: true })}
+                    className="input"
+                  />
+
+                  <label className="placeholder border">
+                    {categoryInput.label}
+                  </label>
+
+                  {errors[categoryInput.name] && (
+                    <span className="error">{categoryInput.errorMessage}</span>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="input-group">
+                <textarea
                   type={categoryInput.type}
-                  placeholder=""
+                  placeholder={categoryInput.placeholder}
                   {...register(categoryInput.name, { required: true })}
-                  className="input"
+                  className="input scrollbar-hide"
+                  rows="1"
                 />
 
                 <label className="placeholder border">
@@ -112,35 +141,16 @@ const CreateOrEditCategory = () => {
                   <span className="error">{categoryInput.errorMessage}</span>
                 )}
               </div>
-            ) : (
-              <div className="py-4">
-                <div className="input-group w-full">
-                  <textarea
-                    type={categoryInput.type}
-                    placeholder={categoryInput.placeholder}
-                    {...register(categoryInput.name, { required: true })}
-                    className="input scrollbar-hide"
-                    rows="3"
-                  />
-
-                  <label className="placeholder">{categoryInput.label}</label>
-
-                  {errors[categoryInput.name] && (
-                    <span className="error">{categoryInput.errorMessage}</span>
-                  )}
-                </div>
-              </div>
             )}
           </div>
         ))}
 
-        <div className="mt-[30px] sm:mt-10 flex justify-end  absolute -bottom-[10px] w-fit right-0">
+        <div className="flex justify-end">
           <Button
-            icon={<BsSave className="w-5 h-5 text-white" />}
+            icon={<BsSave className="w-5 h-5" />}
             title="Save"
             type="submit"
-            buttonStyles="flex items-center gap-x-2 px-2 py-2 bg-c_yellow hover:bg-c_yellow/50 rounded-xl text-white"
-            buttonTitleWrapperStyles="hidden sm:block"
+            buttonStyles="primary_button"
           />
         </div>
       </form>

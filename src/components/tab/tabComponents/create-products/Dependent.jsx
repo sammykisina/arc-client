@@ -9,7 +9,7 @@ import {
   globalProductState,
   isEditingProductState,
 } from "../../../../atoms/ProductAtom";
-import { showCreateOrEditProductState } from "../../../../atoms/ModalAtoms";
+import { showCreateOrEditProductState } from "../../../../atoms/ModalAtom";
 import { useEffect } from "react";
 import { createProductDecisionTabsIndexState } from "../../../../atoms/AppAtoms";
 
@@ -100,10 +100,12 @@ const Dependent = () => {
         name: globalProduct?.attributes?.name,
       });
 
-      setSelectedCategory({
-        name: globalProduct?.relationships?.category?.attributes?.name,
-        value: globalProduct?.relationships?.category?.id,
-      });
+      if (globalProduct?.relationships?.category) {
+        setSelectedCategory({
+          name: globalProduct?.relationships?.category?.attributes?.name,
+          value: globalProduct?.relationships?.category?.id,
+        });
+      }
     }
   }, [globalProduct]);
 
@@ -155,9 +157,8 @@ const Dependent = () => {
       <div className="absolute bottom-0 sm:-bottom-[80px] right-0">
         <Button
           title="Save"
-          icon={<BsSave className="w-5 h-5 text-white" />}
-          buttonStyles="flex items-center gap-x-2 px-4 py-2 bg-c_yellow rounded-xl text-white"
-          buttonTitleWrapperStyles="hidden sm:block"
+          icon={<BsSave className="w-5 h-5" />}
+          buttonStyles="primary_button"
           type="submit"
         />
       </div>

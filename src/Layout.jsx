@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { CgClose } from "react-icons/cg";
 import { useRecoilValue, useRecoilState } from "recoil";
 import {
   createProductDecisionTabsIndexState,
@@ -25,7 +24,9 @@ import {
   showDeleteProductVariantModalState,
   showDeleteSupplierModalState,
   showDeleteTableModalState,
-} from "./atoms/ModalAtoms";
+  showCreateOrEditProcurementModalState,
+  showDeleteProcurementModalState,
+} from "./atoms/ModalAtom";
 import {
   Sidebar,
   TopHeader,
@@ -44,6 +45,8 @@ import {
   CreateOrEditSupplier,
   DeleteSupplier,
   AddSupplyItem,
+  CreateOrEditProcurement,
+  DeleteProcurement,
 } from "./components";
 import AppRoutes from "./routes/AppRoutes";
 import { useClickOutside } from "react-haiku";
@@ -62,60 +65,43 @@ const Layout = () => {
   /**
    * modal states
    */
-  const [showCreateOrEditProduct, setShowCreateOrEditProduct] = useRecoilState(
-    showCreateOrEditProductState
+  const showCreateOrEditProduct = useRecoilValue(showCreateOrEditProductState);
+  const showCreateOrEditEmployeeModal = useRecoilValue(
+    showCreateOrEditEmployeeModalState
   );
-  const [showCreateOrEditEmployeeModal, setShowCreateOrEditEmployeeModal] =
-    useRecoilState(showCreateOrEditEmployeeModalState);
-
-  const [showCreateOrEditCategoryModal, setShowCreateOrEditCategoryModal] =
-    useRecoilState(showCreateOrEditCategoryModalState);
-
-  const [showDeleteEmployeeModal, setShowDeleteEmployeeModal] = useRecoilState(
-    showDeleteEmployeeModalState
+  const showCreateOrEditCategoryModal = useRecoilValue(
+    showCreateOrEditCategoryModalState
   );
-
-  const [showDeleteCategoryModal, setShowDeleteCategoryModal] = useRecoilState(
-    showDeleteCategoryModalState
+  const showDeleteEmployeeModal = useRecoilValue(showDeleteEmployeeModalState);
+  const showDeleteCategoryModal = useRecoilValue(showDeleteCategoryModalState);
+  const showDeleteProductModal = useRecoilValue(showDeleteProductModalState);
+  const showCreateOrEditProductVariantModal = useRecoilValue(
+    showCreateOrEditProductVariantModalState
   );
-
-  const [showDeleteProductModal, setShowDeleteProductModal] = useRecoilState(
-    showDeleteProductModalState
+  const showDeleteProductVariantModal = useRecoilValue(
+    showDeleteProductVariantModalState
   );
-
-  const [
-    showCreateOrEditProductVariantModal,
-    setShowCreateOrEditProductVariantModal,
-  ] = useRecoilState(showCreateOrEditProductVariantModalState);
-
-  const [showDeleteProductVariantModal, setShowDeleteProductVariantModal] =
-    useRecoilState(showDeleteProductVariantModalState);
-
-  const [showCreateOrEditShift, setShowCreateOrEditShift] = useRecoilState(
-    showCreateOrEditShiftState
+  const showCreateOrEditShift = useRecoilValue(showCreateOrEditShiftState);
+  const showCreateOrEditOrderModal = useRecoilValue(
+    showCreateOrEditOrderModalState
   );
-
-  const [showCreateOrEditOrderModal, setShowCreateOrEditOrderModal] =
-    useRecoilState(showCreateOrEditOrderModalState);
-
-  const [showCreateOrEditTableModal, setShowCreateOrEditTableModal] =
-    useRecoilState(showCreateOrEditTableModalState);
-
-  const [showDeleteTableModal, setShowDeleteTableModal] = useRecoilState(
-    showDeleteTableModalState
+  const showCreateOrEditTableModal = useRecoilValue(
+    showCreateOrEditTableModalState
   );
+  const showDeleteTableModal = useRecoilValue(showDeleteTableModalState);
   const createProductDecisionTabsIndex = useRecoilValue(
     createProductDecisionTabsIndexState
   );
-  const [showCreateOrEditSupplierModal, setShowCreateOrEditSupplierModal] =
-    useRecoilState(showCreateOrEditSupplierModalState);
-
-  const [showDeleteSupplierModal, setShowDeleteSupplierModal] = useRecoilState(
-    showDeleteSupplierModalState
+  const showCreateOrEditSupplierModal = useRecoilValue(
+    showCreateOrEditSupplierModalState
   );
-
-  const [showAddSupplyItemModal, setShowAddSupplyItemModal] = useRecoilState(
-    showAddSupplyItemModalState
+  const showDeleteSupplierModal = useRecoilValue(showDeleteSupplierModalState);
+  const showAddSupplyItemModal = useRecoilValue(showAddSupplyItemModalState);
+  const showCreateOrEditProcurementModal = useRecoilValue(
+    showCreateOrEditProcurementModalState
+  );
+  const showDeleteProcurementModal = useRecoilValue(
+    showDeleteProcurementModalState
   );
 
   // component functions
@@ -169,98 +155,74 @@ const Layout = () => {
               ? "h-[460px] sm:h-[350px]"
               : "h-[350px] sm:h-[290px]"
           } w-[95vw]`}
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowCreateOrEditProduct(false)}
           component={<CreateOrEditProduct />}
         />
         {/* the delete product modal */}
         <Modal
           modalState={showDeleteProductModal}
-          modalStyles="w-[90vw] h-[280px] sm:h-[250px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowDeleteProductModal(false)}
+          modalStyles="w-[90vw] h-fit"
           component={<DeleteProduct />}
         />
-        {/* the create employee modal */}
+        {/* the create or edit employee modal */}
         <Modal
           modalState={showCreateOrEditEmployeeModal}
           modalStyles="w-[95vw] h-[500px] sm:h-[400px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowCreateOrEditEmployeeModal(false)}
           component={<CreateOrEditEmployee />}
         />
         {/* the delete employee modal */}
         <Modal
           modalState={showDeleteEmployeeModal}
-          modalStyles="w-[90vw] h-[280px] sm:h-[250px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowDeleteEmployeeModal(false)}
+          modalStyles="w-[90vw] h-fit"
           component={<DeleteEmployee />}
         />
         {/* the create or edit the category modal */}
         <Modal
           modalState={showCreateOrEditCategoryModal}
-          modalStyles="w-[90vw] h-[350px] sm:h-[350px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowCreateOrEditCategoryModal(false)}
+          modalStyles="w-[90vw] h-fit"
           component={<CreateOrEditCategory />}
         />
         {/* the delete category modal */}
         <Modal
           modalState={showDeleteCategoryModal}
-          modalStyles="w-[90vw] h-[300px] sm:h-[250px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowDeleteCategoryModal(false)}
+          modalStyles="w-[90vw] h-fit"
           component={<DeleteCategory />}
         />
         {/* the create or edit product variant modal */}
         <Modal
           modalState={showCreateOrEditProductVariantModal}
           modalStyles="w-[95vw] h-[500px] sm:h-[400px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowCreateOrEditProductVariantModal(false)}
           component={<CreateOrEditProductVariant />}
         />
         {/* the delete product variant modal */}
         <Modal
           modalState={showDeleteProductVariantModal}
           modalStyles="w-[90vw] h-[300px] sm:h-[250px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowDeleteProductVariantModal(false)}
           component={<DeleteProductVariant />}
         />
         {/* the create shift modal */}
         <Modal
           modalState={showCreateOrEditShift}
           modalStyles="w-[90vw] h-[330px] sm:h-[260px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowCreateOrEditShift(false)}
           component={<CreateOrEditShift />}
         />
         {/* create or edit an order modal */}
         <Modal
           modalState={showCreateOrEditOrderModal}
           modalStyles="w-[90vw] h-[330px] sm:h-[300px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowCreateOrEditOrderModal(false)}
           component={<CreateOrEditOrder />}
         />
 
         {/* create or edit a table modal */}
         <Modal
           modalState={showCreateOrEditTableModal}
-          modalStyles="w-[95vw] h-[420px] sm:h-[365px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowCreateOrEditTableModal(false)}
+          modalStyles="w-[95vw] h-fit"
           component={<CreateOrEditTable />}
         />
 
         {/* the delete table modal */}
         <Modal
           modalState={showDeleteTableModal}
-          modalStyles="w-[90vw] h-[280px] sm:h-[250px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowDeleteTableModal(false)}
+          modalStyles="w-[90vw] h-fit"
           component={<DeleteTable />}
         />
 
@@ -268,27 +230,35 @@ const Layout = () => {
         <Modal
           modalState={showCreateOrEditSupplierModal}
           modalStyles="w-[95vw] h-[500px] sm:h-[400px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowCreateOrEditSupplierModal(false)}
           component={<CreateOrEditSupplier />}
         />
 
         {/* the delete supplier modal */}
         <Modal
           modalState={showDeleteSupplierModal}
-          modalStyles="w-[90vw] h-[280px] sm:h-[250px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowDeleteSupplierModal(false)}
+          modalStyles="w-[90vw] h-fit"
           component={<DeleteSupplier />}
         />
 
-        {/* create supply item modal */}
+        {/* add supply item modal */}
         <Modal
           modalState={showAddSupplyItemModal}
-          modalStyles="w-[90vw] h-[250px]"
-          closeIcon={<CgClose className={`w-5 h-5 text-c_green`} />}
-          close={() => setShowAddSupplyItemModal(false)}
+          modalStyles="w-[90vw] h-fit"
           component={<AddSupplyItem />}
+        />
+
+        {/* create or edit procurement modal */}
+        <Modal
+          modalState={showCreateOrEditProcurementModal}
+          modalStyles={`w-[95vw] h-[430px] sm:h-fit`}
+          component={<CreateOrEditProcurement />}
+        />
+
+        {/* the delete procurement modal */}
+        <Modal
+          modalState={showDeleteProcurementModal}
+          modalStyles="w-[90vw] h-fit"
+          component={<DeleteProcurement />}
         />
       </section>
     </BrowserRouter>

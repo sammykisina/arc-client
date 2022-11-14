@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { globalSupplierState } from "../../../atoms/SuppliersListAtom";
-import { Title, Line, Button, Select } from "../..";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { globalSupplierState } from "../../../atoms/SupplierAtom";
+import { Title, Line, Button, Select, ModalClose, ModalHeader } from "../..";
 import { Notification } from "../../../utils/notifications";
-import { showAddSupplyItemModalState } from "../../../atoms/ModalAtoms";
-import { useSuppliersList } from "../../../hooks";
+import { showAddSupplyItemModalState } from "../../../atoms/ModalAtom";
+import { useSupplier } from "../../../hooks";
+import { BsSave } from "react-icons/bs";
 
 const AddSupplyItem = () => {
   /**
    * Component states
    */
-  const globalSupplier = useRecoilValue(globalSupplierState);
-  const { addSupplierSupplyItems } = useSuppliersList();
-  const { generateSupplierSupplyItems } = useSuppliersList();
+  const [globalSupplier, setGlobalSupplier] =
+    useRecoilState(globalSupplierState);
+  const { addSupplierSupplyItems, generateSupplyItems } = useSupplier();
   const [selectedSupplyItems, setSelectedSupplyItems] = useState([]);
-  const setShowCreateSupplyItem = useSetRecoilState(
-    showAddSupplyItemModalState
-  );
+  const setShowAddSupplyItem = useSetRecoilState(showAddSupplyItemModalState);
   /**
    * Component functions
    */
@@ -31,9 +30,7 @@ const AddSupplyItem = () => {
       return;
     }
 
-    addSupplierSupplyItems(selectedSupplyItems);
-
-    setShowCreateSupplyItem(false);
+    addSupplierSupplyItems(selectedSupplyItems), setShowAddSupplyItem(false);
   };
 
   useEffect(() => {
@@ -70,29 +67,40 @@ const AddSupplyItem = () => {
   }, [globalSupplier]);
 
   return (
-    <section className="relative h-full">
-      <Title title={`Supply Items for ${globalSupplier?.attributes?.name}.`} />
-      <Line lineStyles="bg-c_yellow/100 w-[25px] h-[5px] rounded-full" />
-
-      <Select
-        title=""
-        options={generateSupplierSupplyItems()}
-        selectWrapperStyles="w-full rounded-md ring-c_gray mt-5  py-2 px-2"
-        selectPanelStyles="ring-c_gray/40 shadow h-[90px]"
-        selected={selectedSupplyItems}
-        multiple
-        setSelected={(option) => setSelectedSupplyItems(option)}
-        selectLabel="Select Supply items Options"
-        selectLabelStyles="border text-base text-c_dark/50 rounded-full px-1"
+    <section className="space-y-5 ">
+      {/* Header */}
+      <ModalHeader
+        close={() => {
+          setGlobalSupplier(null), setShowAddSupplyItem(false);
+        }}
+        title={`Supply Items for : ${globalSupplier?.attributes?.name}`}
       />
 
-      <div className="flex justify-end items-center mt-2 absolute bottom-0 w-full">
-        <Button
-          title="Save"
-          buttonStyles="flex items-center gap-x-2 px-4 py-2 bg-c_yellow rounded-xl text-white text-sm"
-          purpose={handleSubmit}
+      {/* Body */}
+      <section className="h-[130px] flex  flex-col justify-between  px-4">
+        <Select
+          title=""
+          options={generateSupplyItems()}
+          selectWrapperStyles="w-4/5 rounded-md ring-c_gray py-2 px-2"
+          selectPanelStyles="ring-c_gray/40 shadow h-[90px]"
+          selected={selectedSupplyItems}
+          multiple
+          setSelected={(option) => setSelectedSupplyItems(option)}
+          selectLabel="Select Supply items"
+          selectLabelStyles="border text-base text-c_dark/50 rounded-full px-1"
         />
-      </div>
+
+        {/* Submit Btn */}
+        <div className="flex justify-end">
+          <Button
+            title="Save"
+            icon={<BsSave className="w-5 h-5" />}
+            buttonStyles="primary_button"
+            buttonTitleWrapperStyles="hidden sm:block"
+            purpose={handleSubmit}
+          />
+        </div>
+      </section>
     </section>
   );
 };

@@ -14,3 +14,6 @@ export { default as StatusPill } from "./StatusPill";
 export { default as NumberCell } from "./NumberCell";
 export { default as StockCell } from "./StockCell";
 export { default as TimeCell } from "./TimeCell";
+export { default as Date } from "./Date";
+export { default as DeleteAction } from "./DeleteAction";
+export { default as EditAction } from "./EditAction";

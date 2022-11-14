@@ -1,16 +1,20 @@
 import { useState } from "react";
-import { SuppliersList, Tab } from "../../../";
+import { Procurements, Suppliers, Tab, Tokens } from "../../..";
 
-const Suppliers = () => {
+const Suppliers_Procurements_Tokens = () => {
   const [index, setIndex] = useState(0);
   const propertiesTabs = [
     {
       label: "SUPPLIERS",
-      content: <SuppliersList />,
+      content: <Suppliers />,
     },
     {
       label: "PROCUREMENTS",
-      content: "PROCUREMENTS",
+      content: <Procurements />,
+    },
+    {
+      label: "TOKENS",
+      content: <Tokens />,
     },
   ];
 
@@ -28,4 +32,4 @@ const Suppliers = () => {
   );
 };
 
-export default Suppliers;
+export default Suppliers_Procurements_Tokens;

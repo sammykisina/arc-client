@@ -18,6 +18,7 @@ const Product = () => {
     },
   ];
 
+
   /**
    * the official render of the page
    */
